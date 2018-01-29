@@ -30,7 +30,7 @@ private:
 public:
 
     MapGenerator(int w, int h, int m, int n, int num);
-    void loadPatterns(const string& filename);
+    bool loadPatterns(const string& filename);
     bool generate();
     vector<char>& getMap();
     void printMap() const;
