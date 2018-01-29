@@ -1,6 +1,5 @@
 #include "Pattern.h"
 
-
 Pattern::Pattern()
 {
 }
@@ -21,7 +20,7 @@ void Pattern::Initialize(int n, int m, string in)
 	}
 }
 
-void Pattern::getPattern(Pattern& p, ROTATION rotation, bool reflection)
+void Pattern::getPattern(Pattern& p, Rotation rotation, bool reflection)
 {
 	p = *this;
 
@@ -33,16 +32,16 @@ void Pattern::getPattern(Pattern& p, ROTATION rotation, bool reflection)
 	}
 }
 
-void Pattern::rotate(Pattern& p, ROTATION r)
+void Pattern::rotate(Pattern& p, Rotation r)
 {
 	vector<char> v = p.getPatternAsVector();
 	string s = "";
 
 	switch(r)
 	{
-	case R0 : 
+	case Rotation::_0 : 
 		return;
-	case R90 :
+	case Rotation::_90 :
 		{
 			for(int i = 0; i <= m+1; ++i)
 			{
@@ -53,7 +52,7 @@ void Pattern::rotate(Pattern& p, ROTATION r)
 			}
 			p.Initialize(m, n, s);
 		} break;
-	case R180 :
+	case Rotation::_180 :
 		{
 			for(int i = n+1; i >= 0; --i)
 			{
@@ -64,7 +63,7 @@ void Pattern::rotate(Pattern& p, ROTATION r)
 			}
 			p.Initialize(n, m, s);
 		} break;
-	case R270 :
+	case Rotation::_270 :
 		{
 			for(int i = m+1; i >= 0; --i)
 			{
@@ -99,7 +98,7 @@ vector<char>& Pattern::getPatternAsVector() const
 	return const_cast<vector<char>&>(tiles);
 }
 
-bool Pattern::match(Pattern p, JOIN j) const
+bool Pattern::match(Pattern p, Join j) const
 {
 	bool match = true;
 	char t1;
@@ -111,17 +110,17 @@ bool Pattern::match(Pattern p, JOIN j) const
 
 	switch(j)
 	{
-	case NORTH :
-	case SOUTH :
-	case EAST :
-	case WEST :
+	case Join::NORTH :
+	case Join::SOUTH :
+	case Join::EAST :
+	case Join::WEST :
 		{
 			for(int i = 1; i < stop; ++i)
 			{
-				x1 = (j & WEST) ? 1 : ((j & EAST) ? m : i);
-				x2 = (j & WEST) ? m+1 : ((j & EAST) ? 0 : i);
-				y1 = (j & NORTH) ? 1 : ((j & SOUTH) ? n : i);
-				y2 = (j & NORTH) ? n+1 : ((j & SOUTH) ? 0 : i);
+				x1 = (j & Join::WEST) ? 1 : ((j & Join::EAST) ? m : i);
+				x2 = (j & Join::WEST) ? m+1 : ((j & Join::EAST) ? 0 : i);
+				y1 = (j & Join::NORTH) ? 1 : ((j & Join::SOUTH) ? n : i);
+				y2 = (j & Join::NORTH) ? n+1 : ((j & Join::SOUTH) ? 0 : i);
 
 				t1 = (*this)(x1,y1);
 				t2 = p(x2,y2);
@@ -132,10 +131,10 @@ bool Pattern::match(Pattern p, JOIN j) const
 					break;
 				}
 
-				x1 = (j & WEST) ? 0 : ((j & EAST) ? m+1 : i);
-				x2 = (j & WEST) ? m : ((j & EAST) ? 1 : i);
-				y1 = (j & NORTH) ? 0 : ((j & SOUTH) ? n+1 : i);
-				y2 = (j & NORTH) ? n : ((j & SOUTH) ? 1 : i);
+				x1 = (j & Join::WEST) ? 0 : ((j & Join::EAST) ? m+1 : i);
+				x2 = (j & Join::WEST) ? m : ((j & Join::EAST) ? 1 : i);
+				y1 = (j & Join::NORTH) ? 0 : ((j & Join::SOUTH) ? n+1 : i);
+				y2 = (j & Join::NORTH) ? n : ((j & Join::SOUTH) ? 1 : i);
 
 				t1 = (*this)(x1,y1);
 				t2 = p(x2,y2);
@@ -147,15 +146,15 @@ bool Pattern::match(Pattern p, JOIN j) const
 				}
 			}
 		} break;
-	case NORTH_EAST :
-	case SOUTH_EAST :
-	case SOUTH_WEST :
-	case NORTH_WEST :
+	case Join::NORTH_EAST :
+	case Join::SOUTH_EAST :
+	case Join::SOUTH_WEST :
+	case Join::NORTH_WEST :
 		{
-			x1 = (j & EAST) ? m : 1;
-			x2 = (j & EAST) ? 0 : m+1;
-			y1 = (j & NORTH) ? 1 : n;
-			y2 = (j & NORTH) ? n+1 : 0;
+			x1 = (j & Join::EAST) ? m : 1;
+			x2 = (j & Join::EAST) ? 0 : m+1;
+			y1 = (j & Join::NORTH) ? 1 : n;
+			y2 = (j & Join::NORTH) ? n+1 : 0;
 
 			t1 = (*this)(x1,y1);
 			t2 = p(x2,y2);
@@ -163,10 +162,10 @@ bool Pattern::match(Pattern p, JOIN j) const
 			if(t2 != '0' && t1 != t2)
 				match = false;
 
-			x1 = (j & EAST) ? m+1 : 0;
-			x2 = (j & EAST) ? 1 : m;
-			y1 = (j & NORTH) ? 0 : n+1;
-			y2 = (j & NORTH) ? n : 1;
+			x1 = (j & Join::EAST) ? m+1 : 0;
+			x2 = (j & Join::EAST) ? 1 : m;
+			y1 = (j & Join::NORTH) ? 0 : n+1;
+			y2 = (j & Join::NORTH) ? n : 1;
 
 			t1 = (*this)(x1,y1);
 			t2 = p(x2,y2);

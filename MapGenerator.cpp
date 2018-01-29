@@ -227,12 +227,12 @@ void MapGenerator::loadPatterns(const string& filename)
 				Pattern pat, p1;
 				pat.Initialize(n,m,pattern);
 
-				for(int r = R0; r != R270; ++r)
+				for(int r = Rotation::_0; r != Rotation::_270; ++r)
 				{
-					pat.getPattern(p1, static_cast<ROTATION>(r), false);
+					pat.getPattern(p1, static_cast<Rotation>(r), false);
 					patterns.insert(p1);
 
-					pat.getPattern(p1, static_cast<ROTATION>(r), true);
+					pat.getPattern(p1, static_cast<Rotation>(r), true);
 					patterns.insert(p1);
 				}
 

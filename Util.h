@@ -14,96 +14,103 @@
 
 using namespace std;
 
-typedef enum ROTATION	// Az elforgatas merteke
+enum Rotation
 {
-	R0,					// 0 fok
-	R90,				// 90 fok
-	R180,				// 180 fok
-	R270				// 270 fok
+    _0,
+    _90,
+    _180,
+    _270
 };
 
-typedef enum JOIN		// Illeszkedes a mintak kozt,
-{						// clockwise koruljarasban
+/*
+ * NORTH_WEST | NORTH | NORTH_EAST
+ * -----------*********-----------
+ *    WEST    *pattern*   EAST
+ * -----------*********-----------
+ * SOUTH_WEST | SOUTH | SOUTH_EAST
+ */
+enum Join
+{
 
-	NORTH = 0x1,				// felso sor
-	EAST = 0x2,					// jobb oldali oszlop
-	SOUTH = 0x4,				// also sor
-	WEST = 0x8,					// bal oldali oszlop
-	NORTH_EAST = NORTH | EAST,	// jobb felso
-	SOUTH_EAST = SOUTH | EAST,	// jobb also
-	SOUTH_WEST = SOUTH | WEST,	// bal also
-	NORTH_WEST = NORTH | WEST	// bal felso sarok
+    NORTH = 0x1,
+    EAST = 0x2,
+    SOUTH = 0x4,
+    WEST = 0x8,
+    NORTH_EAST = NORTH | EAST,
+    SOUTH_EAST = SOUTH | EAST,
+    SOUTH_WEST = SOUTH | WEST,
+    NORTH_WEST = NORTH | WEST
 };
 
 struct Position
 {
-	int x;
-	int y;
+    int x;
+    int y;
 
-	Position() : x(0), y(0) {}
-	Position(int a, int b) : x(a), y(b) {}
+    Position() : x(0), y(0) {}
+    Position(int a, int b) : x(a), y(b) {}
 
-	Position& operator=(const Position& rhs)
-	{
-		x = rhs.x;
-		y = rhs.y;
+    Position& operator=(const Position& rhs)
+    {
+        x = rhs.x;
+        y = rhs.y;
 
-		return (*this);
-	}
+        return (*this);
+    }
 
-	Position& operator+=(const Position& rhs)
-	{
-		x += rhs.x;
-		y += rhs.y;
+    Position& operator+=(const Position& rhs)
+    {
+        x += rhs.x;
+        y += rhs.y;
 
-		return (*this);
-	}
+        return (*this);
+    }
 
-	Position operator+(const Position& rhs)
-	{
-		return Position(x + rhs.x, y + rhs.y);
-	}
-	
-	bool operator<(const Position& rhs) const
-	{
-		return ((x < rhs.x) || (x == rhs.x && y < rhs.y));
-	}
+    Position operator+(const Position& rhs)
+    {
+        return Position(x + rhs.x, y + rhs.y);
+    }
+    
+    bool operator<(const Position& rhs) const
+    {
+        return ((x < rhs.x) || (x == rhs.x && y < rhs.y));
+    }
 
-	bool operator==(const Position& rhs) const
-	{
-		return (x == rhs.x && y == rhs.y);
-	}
+    bool operator==(const Position& rhs) const
+    {
+        return (x == rhs.x && y == rhs.y);
+    }
 
-	Position diff(const Position rhs) const
-	{
-		return Position(rhs.x - x, rhs.y - y);
-	}
+    Position diff(const Position rhs) const
+    {
+        return Position(rhs.x - x, rhs.y - y);
+    }
 
-	Position inv() const
-	{
-		return Position(-x, -y);
-	}
+    Position inv() const
+    {
+        return Position(-x, -y);
+    }
 
-	Position normal() const
-	{
-		return Position((x != 0) ? x/std::abs(x) : 0, (y != 0) ? y/std::abs(y) : 0);
-	}
+    Position normal() const
+    {
+        return Position((x != 0) ? x/std::abs(x) : 0, (y != 0) ? y/std::abs(y) : 0);
+    }
 
-	int abs() const
-	{
-		return (x != 0) ? std::abs(x) : std::abs(y);
-	}
+    int abs() const
+    {
+        return (x != 0) ? std::abs(x) : std::abs(y);
+    }
 
-	bool isInInterval(Position min, Position max, Position offset) const
-	{
-		Position p(x + offset.x, y + offset.y); 
+    bool isInInterval(Position min, Position max, Position offset) const
+    {
+        Position p(x + offset.x, y + offset.y); 
 
-		return (p.x >= min.x && p.y >= min.y
-			&& p.x < max.x && p.y < max.y);
-	}
+        return (p.x >= min.x && p.y >= min.y
+                && p.x < max.x && p.y < max.y);
+    }
 };
 
 inline int Random(int first, int last)
 {
-	return rand() % (last-first) + first;
+    return rand() % (last-first) + first;
 }
