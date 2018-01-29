@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 
     if (fileName.size() == 0)
     {
-        fileName = "../Data/default";
+        fileName = "./output";
     }
 
     FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, fileName, lgen.getSolution());
