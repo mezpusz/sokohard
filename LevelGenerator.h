@@ -1,5 +1,4 @@
-#ifndef LEVELGENERATOR_H
-#define LEVELGENERATOR_H
+#pragma once
 
 #include "Util.h"
 #include "State.h"
@@ -50,6 +49,3 @@ public:
 	string getSolution() const;
 	int getMax() const;
 };
-
-#endif //LEVELGENERATOR_H
-

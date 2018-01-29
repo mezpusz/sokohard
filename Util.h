@@ -1,5 +1,4 @@
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #include <vector>
 #include <set>
@@ -108,5 +107,3 @@ inline int Random(int first, int last)
 {
 	return rand() % (last-first) + first;
 }
-
-#endif // UTIL_H

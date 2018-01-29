@@ -1,5 +1,4 @@
-#ifndef PATTERN_H
-#define PATTERN_H
+#pragma once
 
 #include "Util.h"
 
@@ -37,6 +36,3 @@ public:
 	bool operator==(const Pattern& rhs) const;
 	bool operator<(const Pattern& rhs) const;
 };
-
-#endif // PATTERN_H
-

@@ -1,5 +1,4 @@
-#ifndef MAP_H
-#define MAP_H
+#pragma once
 
 #include "Util.h"
 
@@ -35,6 +34,3 @@ public:
 
 	void printMap() const;
 };
-
-#endif // MAP_H
-
