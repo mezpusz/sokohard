@@ -1,0 +1,41 @@
+#ifndef MAPGENERATOR_H
+#define MAPGENERATOR_H
+
+#include "Pattern.h"
+#include "Map.h"
+#include "Util.h"
+
+class MapGenerator
+{
+
+private:
+
+	int width;
+	int height;
+	int m, n;
+	int numBoxes;
+	int bCount;
+
+	set<Pattern> patterns;
+	Map charMap;
+	vector<Pattern> patternMap;
+
+private:
+
+	void setCharMap(Pattern& p, int i, int j);
+	bool isConnected();
+	bool checkForOpenSections();
+	bool checkForDeadEnds();
+	void dfs(int i, int j);
+
+public:
+
+	MapGenerator(int w, int h, int m, int n, int num);
+	void loadPatterns(const wstring& filename);
+	bool generate();
+	vector<char>& getMap();
+	void printMap() const;
+};
+
+#endif // MAPGENERATOR_H
+
