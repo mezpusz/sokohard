@@ -212,7 +212,7 @@ void MapGenerator::printMap() const
 	charMap.printMap();
 }
 
-void MapGenerator::loadPatterns(const wstring& filename)
+void MapGenerator::loadPatterns(const string& filename)
 {
 	ifstream fin(filename, ios::binary);
 	string line;
@@ -251,5 +251,3 @@ void MapGenerator::loadPatterns(const wstring& filename)
 		cin.get();
 	}
 }
-
-

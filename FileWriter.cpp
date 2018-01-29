@@ -1,9 +1,9 @@
 #include "FileWriter.h"
 
-void FileWriter::writeMapToFile(vector<char> map, int width, int height, const wstring& filename, string solution)
+void FileWriter::writeMapToFile(vector<char> map, int width, int height, const string& filename, string solution)
 {
-	ofstream mapFile(filename + L".sok");
-	ofstream solFile(filename + L"_solution.sok");
+	ofstream mapFile(filename + ".sok");
+	ofstream solFile(filename + "_solution.sok");
 
 	if(mapFile.is_open() && solFile.is_open())
 	{

@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	int width;
 	int height;
 	int numBoxes;
-	wstring fileName;
+	string fileName;
 	string fn;
 
 	if(argc == 4)
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	LevelGenerator lgen(width*M, height*N, numBoxes);
 
 	set<Pattern> p;
-	mgen.loadPatterns(L"../Data/pattern.txt");
+	mgen.loadPatterns("../Data/pattern.txt");
 
 	int attempt = 1;
 	int max = 0;
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 
 	if(fileName.size() == 0)
 	{
-		fileName = L"../Data/default";
+		fileName = "../Data/default";
 	}
 
 	FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, fileName, lgen.getSolution());

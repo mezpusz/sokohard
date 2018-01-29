@@ -31,11 +31,10 @@ private:
 public:
 
 	MapGenerator(int w, int h, int m, int n, int num);
-	void loadPatterns(const wstring& filename);
+	void loadPatterns(const string& filename);
 	bool generate();
 	vector<char>& getMap();
 	void printMap() const;
 };
 
 #endif // MAPGENERATOR_H
-
