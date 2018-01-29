@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	LevelGenerator lgen(width*M, height*N, numBoxes);
 
 	set<Pattern> p;
-	mgen.loadPatterns("../Data/pattern.txt");
+	mgen.loadPatterns("./patterns");
 
 	int attempt = 1;
 	int max = 0;
