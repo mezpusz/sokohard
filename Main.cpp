@@ -11,9 +11,11 @@
 
 int main(int argc, char* argv[])
 {
-    srand((unsigned int)time(NULL));
-    string widthOption, heightOption, numBoxesOption, outFile;
+    string widthOption, heightOption, numBoxesOption,
+        seedOption,
+        outFile;
     int width, height, numBoxes;
+    unsigned seed;
 
     InputParser parser(argc, argv);
     width = parser.GetOption("--width", widthOption)
@@ -22,11 +24,15 @@ int main(int argc, char* argv[])
             ? stoi(heightOption) : 2;
     numBoxes = parser.GetOption("--numBoxes", numBoxesOption)
             ? stoi(numBoxesOption) : 2;
+    seed = parser.GetOption("--seed", seedOption)
+            ? stoi(seedOption) : time(nullptr);
     if (!parser.GetOption("-o", outFile))
     {
         outFile = "out";
     }
 
+    cout << "Random seed is " << seed << endl;
+    srand(seed);
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes);
 
