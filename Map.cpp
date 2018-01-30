@@ -35,24 +35,6 @@ char& Map::operator()(Position p)
     return m_map[p.y*m_width + p.x];
 }
 
-Map& Map::operator=(Map& rhs)
-{
-    m_width = rhs.width();
-    m_height = rhs.height();
-    m_map.clear();
-    m_map.insert(m_map.begin(), rhs.begin(), rhs.end());
-
-    return (*this);
-}
-
-Map::Map(const Map& rhs)
-{
-    m_width = rhs.width();
-    m_height = rhs.height();
-    m_map.clear();
-    m_map.insert(m_map.begin(), rhs.cbegin(), rhs.cend());
-}
-
 vector<char>& Map::getMap()
 {
     return m_map;
@@ -66,15 +48,6 @@ vector<char>::iterator Map::begin()
 vector<char>::iterator Map::end()
 {
     return m_map.end();
-}
-vector<char>::const_iterator Map::cbegin() const
-{
-    return m_map.cbegin();
-}
-
-vector<char>::const_iterator Map::cend() const
-{
-    return m_map.cend();
 }
 
 int Map::width() const 
