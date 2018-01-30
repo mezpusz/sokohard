@@ -2,7 +2,7 @@
 
 
 MapGenerator::MapGenerator(int w, int h, int m, int n, int num)
-    : width(w), height(h), n(n), m(m), numBoxes(num)
+    : width(w), height(h), m(m), n(n), numBoxes(num)
 {
     patterns.clear();
 }
@@ -129,7 +129,7 @@ void MapGenerator::dfs(int i, int j)
 {
     //cout << i << " + " << j << endl;
 
-    if((charMap(i,j) == ' '))
+    if(charMap(i,j) == ' ')
     {
     charMap(i,j) = '_';
     bCount++;

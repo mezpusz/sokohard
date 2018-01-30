@@ -3,6 +3,7 @@
 #include "MapGenerator.h"
 #include "LevelGenerator.h"
 #include "FileWriter.h"
+#include "InputParser.h"
 #include "Util.h"
 
 #define N 3
@@ -11,33 +12,21 @@
 int main(int argc, char* argv[])
 {
     srand((unsigned int)time(NULL));
-    int width;
-    int height;
-    int numBoxes;
-    string fileName;
-    string fn;
+    string widthOption, heightOption, numBoxesOption, outFile;
+    int width, height, numBoxes;
 
-    if(argc == 4)
+    InputParser parser(argc, argv);
+    width = parser.GetOption("--width", widthOption)
+            ? stoi(widthOption) : 2;
+    height = parser.GetOption("--height", heightOption)
+            ? stoi(heightOption) : 2;
+    numBoxes = parser.GetOption("--numBoxes", numBoxesOption)
+            ? stoi(numBoxesOption) : 2;
+    if (!parser.GetOption("-o", outFile))
     {
-        width = stoi(argv[1]);
-        height = stoi(argv[2]);
-        numBoxes = stoi(argv[3]);
-        fileName.clear();
-    } 
-    else if(argc == 5)
-    {
-        width = stoi(argv[1]);
-        height = stoi(argv[2]);
-        numBoxes = stoi(argv[3]);
-        fn = argv[4];
-        fileName.assign(fn.begin(), fn.end());
+        outFile = "out";
     }
-    else
-    {
-        cout << "Parameters must be: <sizeX> <sizeY> <boxNumber> [<filename>]\n";
-        return -1;
-    }
-    
+
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes);
 
@@ -78,12 +67,12 @@ int main(int argc, char* argv[])
     lgen.calculateSolution();
     lgen.placeBest();
 
-    if (fileName.size() == 0)
+    if (outFile.size() == 0)
     {
-        fileName = "./output";
+        outFile = "./output";
     }
 
-    FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, fileName, lgen.getSolution());
+    FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, outFile, lgen.getSolution());
 
     return 0;
 }

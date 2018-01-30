@@ -4,6 +4,8 @@ cc_binary(
     srcs = [
         "FileWriter.cpp",
         "FileWriter.h",
+        "InputParser.cpp",
+        "InputParser.h",
         "LevelGenerator.cpp",
         "LevelGenerator.h",
         "Main.cpp",
