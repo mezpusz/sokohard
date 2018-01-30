@@ -209,16 +209,15 @@ bool MapGenerator::checkForDeadEnds()
     {
         for(int j = 0; j < height*n; ++j)
         {
-            if(((j-1 >= 0 && charMap(i,j-1) == '#') || j-1 < 0) && ((j+1 < height*n && charMap(i,j+1) == '#') || j+1 >= height*n))
-            {
-                if((i-1 >= 0 && charMap(i-1,j) == '#') || i-1 < 0) return true;
-                if((i+1 < width*m && charMap(i+1,j) == '#') || i+1 >= width*m) return true;
-            }
+            bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
+            bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
+            bool west = (i-1 < 0 || (charMap(i-1,j) == '#'));
+            bool east = (i+1 >= width*m || (charMap(i+1,j) == '#'));
 
-            if(((i-1 >= 0 && charMap(i-1,j) == '#') || i-1 < 0) && ((i+1 < width*m && charMap(i+1,j) == '#') || i+1 >= width*m))
+            if ((north && south && (west || east))
+                || (west && east && (north || south)))
             {
-                if((j-1 >= 0 && charMap(i,j-1) == '#') || j-1 < 0) return true;
-                if((j+1 < height*n && charMap(i,j+1) == '#') || j+1 >= height*n) return true;
+                return true;
             }
         }
     }
