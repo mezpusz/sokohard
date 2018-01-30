@@ -72,7 +72,10 @@ int main(int argc, char* argv[])
         outFile = "./output";
     }
 
-    FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, outFile, lgen.getSolution());
+    if(!FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, outFile, lgen.getSolution()))
+    {
+        return -1;
+    }
 
     return 0;
 }
