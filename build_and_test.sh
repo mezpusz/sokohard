@@ -2,15 +2,15 @@
 
 set -euo "pipefail"
 
-bazel build //:sokohard
+make
 
 readonly SEED2x2w3="1517341101"
 readonly SEED3x3w2="1517341110"
 readonly SEED2x2w5="1517341640"
 
-time bazel-bin/sokohard --width 2 --height 2 --numBoxes 3 --seed ${SEED2x2w3}
-time bazel-bin/sokohard --width 3 --height 3 --numBoxes 2 --seed ${SEED3x3w2}
-time bazel-bin/sokohard --width 2 --height 2 --numBoxes 5 --seed ${SEED2x2w5}
+time out/sokohard --width 2 --height 2 --numBoxes 3 --seed ${SEED2x2w3}
+time out/sokohard --width 3 --height 3 --numBoxes 2 --seed ${SEED3x3w2}
+time out/sokohard --width 2 --height 2 --numBoxes 5 --seed ${SEED2x2w5}
 
 #1517341101, 6x6, boxes: 3
 #Difficulty: 20
