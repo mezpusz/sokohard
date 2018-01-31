@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mezpusz/sokohard.svg?branch=master)](https://travis-ci.org/mezpusz/sokohard)
+
 # sokohard
 sokohard is a [Sokoban](https://en.wikipedia.org/wiki/Sokoban) map generator that creates relatively hard-to-solve maps.
 
