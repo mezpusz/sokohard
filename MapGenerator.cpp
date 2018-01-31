@@ -31,35 +31,28 @@ bool MapGenerator::generate()
 
                 do
                 {
-                    set<Pattern>::iterator it = patterns.begin();
+                    auto it = patterns.begin();
                     advance(it, Random(0, numPatterns-1));
                     p = *it;
-                    match = true;
 
-                    if (i > 0 && j > 0 && !p.match(patternMap[(j-1)*width + i - 1], NORTH_WEST))
+                    if ((i > 0 && j > 0 && !p.match(patternMap[(j-1)*width + i - 1], NORTH_WEST))
+                        || (j > 0 && !p.match(patternMap[(j-1)*width + i], NORTH))
+                        || (i < (width - 1) && j > 0 && !p.match(patternMap[(j-1)*width + i + 1], NORTH_EAST))
+                        || (i > 0 && !p.match(patternMap[j*width + i - 1], WEST)))
                     {
                         match = false;
                     }
-                    if (j > 0 && !p.match(patternMap[(j-1)*width + i], NORTH))
+                    else
                     {
-                        match = false;
-                    }
-                    if (i < (width - 1) && j > 0 && !p.match(patternMap[(j-1)*width + i + 1], NORTH_EAST))
-                    {
-                        match = false;
-                    }
-                    if (i > 0 && !p.match(patternMap[j*width + i - 1], WEST))
-                    {
-                        match = false;
+                        match = true;
                     }
 
-                    ptry++;
-                    if (ptry > 100)
+                    if (++ptry > 100)
                     {
                         return false;
                     }
-
-                } while(!match);
+                }
+                while(!match);
 
                 patternMap[j*width + i] = p;
                 setCharMap(p, i, j);
@@ -92,8 +85,7 @@ void MapGenerator::setCharMap(Pattern& p, int i, int j)
 
 bool MapGenerator::isConnected()
 {
-    int rCount = 0;
-    bCount = 0;
+    int floors = 0;
 
     Map tempMap = charMap;
 
@@ -101,62 +93,61 @@ bool MapGenerator::isConnected()
     {
         for(int j = 0; j < height*n; ++j)
         {
-            if(charMap(i,j) == ' ') rCount++;
+            if(charMap(i,j) == ' ') floors++;
         }
     }
 
     // Sanity check so that we don't end up with a map too small
-    if (rCount < numBoxes + 2)
+    if (floors < numBoxes + 2)
     {
         return false;
     }
 
+    int result = 0;
     for (int i = 0; i < width*m; ++i)
     {
         for (int j = 0; j < height*n; ++j)
         {
             if (charMap(i,j) == ' ')
             {
-                dfs(i,j);
+                result = countConnected(i,j);
                 break;
             }
         }
-        if(bCount > 0) break;
+        if(result > 0) break;
     }
 
     charMap = tempMap;
 
-    //cout << rCount << " " << bCount << endl;
-
-    return (rCount == bCount) && (rCount > 0);
+    return (floors == result) && (floors > 0);
 }
 
-void MapGenerator::dfs(int i, int j)
+int MapGenerator::countConnected(int i, int j)
 {
-    //cout << i << " + " << j << endl;
-
+    int result = 0;
     if(charMap(i,j) == ' ')
     {
         charMap(i,j) = '_';
-        bCount++;
+        result++;
 
         if (i > 0)
         {
-            dfs(i-1, j);
+            result += countConnected(i-1, j);
         }
         if (i < width*m)
         {
-            dfs(i+1, j);
+            result += countConnected(i+1, j);
         }
         if (j > 0)
         {
-            dfs(i, j-1);
+            result += countConnected(i, j-1);
         }
         if (j < height*n)
         {
-            dfs(i, j+1);
+            result += countConnected(i, j+1);
         }
     }
+    return result;
 }
 
 bool MapGenerator::checkForOpenSections()
@@ -209,6 +200,13 @@ bool MapGenerator::checkForDeadEnds()
     {
         for(int j = 0; j < height*n; ++j)
         {
+            /* TODO(mezpusz): Find out if it produces better results
+            if (charMap(i,j) == '#')
+            {
+                continue;
+            }
+            */
+
             bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
             bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
             bool west = (i-1 < 0 || (charMap(i-1,j) == '#'));
