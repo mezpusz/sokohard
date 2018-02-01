@@ -34,5 +34,5 @@ Parameters are the following:
 * `--width` - Width of the map (not including pattern width) - defaults to 2
 * `--height` - Height of the map (not including pattern height) - defaults to 2
 * `--numBoxes` - Boxes to be placed on the map - defaults to 2
-* `-o` - Output file name - defaults to 2
+* `-o` - Output file name - defaults to `out`
 * `--seed` - Seed (32-bit integer) for the random generator. - default is current UNIX-epoch timestamp
