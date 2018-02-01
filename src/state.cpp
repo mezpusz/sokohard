@@ -1,4 +1,4 @@
-#include "State.h"
+#include "state.h"
 
 State::State(Position p, set<Position> b, Position moved)
 	: numBoxes(b.size()), boxPos(b.begin(), b.end()), playerPos(p)

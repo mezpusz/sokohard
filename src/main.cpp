@@ -1,10 +1,10 @@
 
-#include "Pattern.h"
-#include "MapGenerator.h"
-#include "LevelGenerator.h"
-#include "FileWriter.h"
-#include "InputParser.h"
-#include "Util.h"
+#include "pattern.h"
+#include "mapgenerator.h"
+#include "levelgenerator.h"
+#include "filewriter.h"
+#include "inputparser.h"
+#include "util.h"
 
 #define N 3
 #define M 3

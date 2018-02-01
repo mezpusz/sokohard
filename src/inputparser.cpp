@@ -1,4 +1,4 @@
-#include "InputParser.h"
+#include "inputparser.h"
 
 InputParser::InputParser(int argc, char* argv[])
     : tokens_()

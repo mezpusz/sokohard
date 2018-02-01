@@ -1,4 +1,4 @@
-#include "FileWriter.h"
+#include "filewriter.h"
 
 bool FileWriter::writeMapToFile(vector<char> map, int width, int height, const string& filename, const string& solution)
 {

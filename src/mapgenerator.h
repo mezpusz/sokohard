@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Pattern.h"
-#include "Map.h"
-#include "Util.h"
+#include "pattern.h"
+#include "map.h"
+#include "util.h"
 
 class MapGenerator
 {

@@ -1,4 +1,4 @@
-#include "LevelGenerator.h"
+#include "levelgenerator.h"
 
 LevelGenerator::LevelGenerator(int w, int h, int n)
 	: width(w), height(h), numBoxes(n), available(0), m_max(0)

@@ -1,4 +1,4 @@
-#include "Pattern.h"
+#include "pattern.h"
 
 Pattern::Pattern()
 {

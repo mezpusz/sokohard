@@ -1,4 +1,4 @@
-#include "Map.h"
+#include "map.h"
 
 void Map::init(int width, int height, char c)
 {

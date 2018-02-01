@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Util.h"
-#include "State.h"
-#include "Map.h"
+#include "util.h"
+#include "state.h"
+#include "map.h"
 
 class LevelGenerator
 {

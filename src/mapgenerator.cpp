@@ -1,4 +1,4 @@
-#include "MapGenerator.h"
+#include "mapgenerator.h"
 
 MapGenerator::MapGenerator(int w, int h, int m, int n, int num)
     : width(w)

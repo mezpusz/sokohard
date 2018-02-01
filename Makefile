@@ -15,7 +15,7 @@ CFLAGS = -Wall -O3 -std=c++17 -stdlib=libc++
 INCLUDES = -I.
 
 # define the CXX source files
-SRCS = FileWriter.cpp InputParser.cpp LevelGenerator.cpp Main.cpp Map.cpp MapGenerator.cpp Pattern.cpp State.cpp
+SRCS = filewriter.cpp inputparser.cpp levelgenerator.cpp main.cpp map.cpp mapgenerator.cpp pattern.cpp state.cpp
 
 # define the CXX object files 
 OBJS = $(addprefix out/, $(SRCS:.cpp=.o))
@@ -30,7 +30,7 @@ out/sokohard: out $(OBJS)
 out:
 		mkdir out
 
-out/%.o: %.cpp
+out/%.o: src/%.cpp
 		$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:

@@ -31,7 +31,6 @@ enum Rotation
  */
 enum Join
 {
-
     NORTH = 0x1,
     EAST = 0x2,
     SOUTH = 0x4,
