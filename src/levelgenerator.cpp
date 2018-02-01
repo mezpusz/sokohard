@@ -1,17 +1,23 @@
 #include "levelgenerator.h"
 
+#include "util.h"
+
 LevelGenerator::LevelGenerator(int w, int h, int n)
-	: width(w), height(h), numBoxes(n), available(0), m_max(0)
+	: width(w)
+	, height(h)
+	, numBoxes(n)
+	, available(0)
+	, m_max(0)
 {
 }
 
-int LevelGenerator::generate(vector<char> v)
+int LevelGenerator::generate(std::vector<char> v)
 {
 	available = 0;
 
 	m_map.init(width,height,v);
 
-	for(vector<char>::iterator it = m_map.begin(); it != m_map.end(); ++it)
+	for(std::vector<char>::iterator it = m_map.begin(); it != m_map.end(); ++it)
 	{
 		if(*it == ' ')
 		{
@@ -26,11 +32,11 @@ int LevelGenerator::generate(vector<char> v)
 
 	placeGoals();
 
-	set<Position> ps;
+	std::set<Position> ps;
 
 	ps.insert(goals.begin(), goals.end());
 
-	vector<Position> pPos = initPlayer(ps);
+	std::vector<Position> pPos = initPlayer(ps);
 
 	for(unsigned int i = 0; i < pPos.size(); ++i)
 	{
@@ -44,12 +50,12 @@ int LevelGenerator::generate(vector<char> v)
 		State s = openSet.front();
 		openSet.pop_front();
 
-		vector<State> states = expand(s);
+		std::vector<State> states = expand(s);
 		
-		map<State, State>::iterator it = parents.find(s);
+		std::map<State, State>::iterator it = parents.find(s);
 		if (it == parents.end())
 		{
-			closedSet.insert(pair<State, int>(s, 0));
+			closedSet.insert(std::pair<State, int>(s, 0));
 		}
 		else
 		{
@@ -58,7 +64,7 @@ int LevelGenerator::generate(vector<char> v)
 			int pValue = closedSet.find(parent)->second;
 			bool boxChange = (child.getBoxPos().count(parent.getMoved()) != 0);
 			if(boxChange) pValue+=1;
-			closedSet.insert(pair<State, int>(s, pValue+1));
+			closedSet.insert(std::pair<State, int>(s, pValue+1));
 		}
 
 
@@ -68,7 +74,7 @@ int LevelGenerator::generate(vector<char> v)
 			{
 				openSet.push_back(states[i]);
 				checked.insert(states[i]);
-				parents.insert(pair<State, State>(states[i], s));
+				parents.insert(std::pair<State, State>(states[i], s));
 			}
 		}
 	}
@@ -76,7 +82,7 @@ int LevelGenerator::generate(vector<char> v)
 	int max = 0;
 	State best;
 
-	for(map<State, int>::iterator it = closedSet.begin(); it != closedSet.end(); ++it)
+	for(std::map<State, int>::iterator it = closedSet.begin(); it != closedSet.end(); ++it)
 	{
 		if(it->second >= max)
 		{
@@ -106,15 +112,15 @@ int LevelGenerator::generate(vector<char> v)
 	return max;
 }
 
-vector<Position> LevelGenerator::initPlayer(set<Position> boxes)
+std::vector<Position> LevelGenerator::initPlayer(std::set<Position> boxes)
 {
 	int count = 0;
-	vector<Position> pos;
+	std::vector<Position> pos;
 	Position p, min;
 
 	Map tempMap = m_map;
 
-	for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+	for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 	{
 		m_map(*it) = '$';
 	}
@@ -138,14 +144,14 @@ vector<Position> LevelGenerator::initPlayer(set<Position> boxes)
 	return pos;
 }
 
-Position LevelGenerator::placePlayer(set<Position> boxes, Position prev)
+Position LevelGenerator::placePlayer(std::set<Position> boxes, Position prev)
 {
 	int count = 0;
 	Position min;
 
 	Map tempMap = m_map;
 
-	for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+	for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 	{
 		m_map(*it) = '$';
 	}
@@ -175,22 +181,22 @@ int LevelGenerator::floodfill(Position p, Position& min)
 	return c;
 }
 
-vector<char>& LevelGenerator::getMap()
+std::vector<char>& LevelGenerator::getMap()
 {
 	return m_map.getMap();
 }
 
-vector<State> LevelGenerator::expand(State s)
+std::vector<State> LevelGenerator::expand(State s)
 {
-	vector<State> eStates;
+	std::vector<State> eStates;
 	Position min(0,0);
 	Position max(width, height);
 
 	Map tempMap = m_map;
 
 	Position minPos = s.getPlayerPos();
-	set<Position> boxes = s.getBoxPos();
-	for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+	std::set<Position> boxes = s.getBoxPos();
+	for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 	{
 		m_map(*it) = '$';
 	}
@@ -199,7 +205,7 @@ vector<State> LevelGenerator::expand(State s)
 	Map floodedMap = m_map;
 	m_map = tempMap;
 
-	for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+	for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 	{
 		Position actual;
 
@@ -212,7 +218,7 @@ vector<State> LevelGenerator::expand(State s)
 
 				while(actual.isInInterval(min,max,direction[i]) && floodedMap(actual + direction[i]) == '_')
 				{
-					set<Position> ps(boxes.begin(), boxes.end());
+					std::set<Position> ps(boxes.begin(), boxes.end());
 					Position pushedBox = *(ps.find(*it));
 					ps.erase(pushedBox);
 					pushedBox = actual;
@@ -231,10 +237,10 @@ void LevelGenerator::calculateSolution()
 {
 	m_solution.clear();
 	Position player = m_bestSolution[0].getPlayerPos();
-	set<Position> boxes;
-	set<Position> next;
-	set<Position>::iterator b;
-	set<Position>::iterator n;
+	std::set<Position> boxes;
+	std::set<Position> next;
+	std::set<Position>::iterator b;
+	std::set<Position>::iterator n;
 	char s[] = "RLDU";
 	char s1[] = "rldu";
 
@@ -245,7 +251,7 @@ void LevelGenerator::calculateSolution()
 		boxes = m_bestSolution[i].getBoxPos();
 		next = m_bestSolution[i+1].getBoxPos();
 
-		for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+		for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 		{
 			m_bestMap(*it) = '$';
 		}
@@ -267,13 +273,13 @@ void LevelGenerator::calculateSolution()
 		if(!(pNext == player))
 		{
 			string str;
-			deque<pair<Position, string>> d;
+			std::deque<pair<Position, string>> d;
 
 			d.push_back(make_pair(player, string()));
 
 			while(!d.empty())
 			{
-				pair<Position, string> p = d.front();
+				std::pair<Position, std::string> p = d.front();
 				d.pop_front();
 
 				if(p.first == pNext) 
@@ -316,7 +322,7 @@ void LevelGenerator::placeGoals()
 	int count;
 	bool success = false;
 	Position p;
-	set<Position> pos;
+	std::set<Position> pos;
 
 	goals.clear();
 
@@ -353,15 +359,15 @@ void LevelGenerator::placeBest()
 
 	Position player = m_best.getPlayerPos();
 
-	set<Position> boxes = m_best.getBoxPos();
+	std::set<Position> boxes = m_best.getBoxPos();
 
-	for(set<Position>::iterator it = m_bestGoals.begin(); it != m_bestGoals.end(); ++it)
+	for(std::set<Position>::iterator it = m_bestGoals.begin(); it != m_bestGoals.end(); ++it)
 	{
 		m_bestMap(*it) = '.';
 		//cout << it->x << " " << it->y << " ";
 	}
 
-	for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+	for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 	{
 		m_bestMap(*it) = (m_bestGoals.find(*it) == m_bestGoals.end()) ? '$' : '*';
 	}
@@ -381,28 +387,28 @@ void LevelGenerator::printBest()
 
 		Position player = m_bestSolution[i].getPlayerPos();
 
-		set<Position> boxes = m_bestSolution[i].getBoxPos();
+		std::set<Position> boxes = m_bestSolution[i].getBoxPos();
 
-		for(set<Position>::iterator it = m_bestGoals.begin(); it != m_bestGoals.end(); ++it)
+		for(std::set<Position>::iterator it = m_bestGoals.begin(); it != m_bestGoals.end(); ++it)
 		{
 			m_bestMap(*it) = '.';
 		}
 
-		for(set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
+		for(std::set<Position>::iterator it = boxes.begin(); it != boxes.end(); ++it)
 		{
 			m_bestMap(*it) = (m_bestGoals.find(*it) == m_bestGoals.end()) ? '$' : '*';
 		}
 
 		m_bestMap(player) = (m_bestGoals.find(player) == m_bestGoals.end()) ? '@' : '+';
 
-		m_bestMap.printMap();
+		std::cout << m_bestMap;
 		m_bestMap = temp;
 	}
 }
 
 void LevelGenerator::printMap() const
 {
-	m_map.printMap();
+	std::cout << m_map;
 }
 
 int LevelGenerator::getMax() const

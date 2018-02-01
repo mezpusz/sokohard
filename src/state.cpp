@@ -1,77 +1,81 @@
 #include "state.h"
 
-State::State(Position p, set<Position> b, Position moved)
-	: numBoxes(b.size()), boxPos(b.begin(), b.end()), playerPos(p)
+State::State(Position p, std::set<Position> b, Position moved)
+    : numBoxes(b.size())
+    , boxPos(b.begin(), b.end())
+    , playerPos(p)
 {
-	movedBox = boxPos.find(moved);
+    movedBox = boxPos.find(moved);
 }
 
 State::State(const State& rhs)
 {
-	numBoxes = rhs.getNumBoxes();
-	playerPos = rhs.getPlayerPos();
-	boxPos = rhs.getBoxPos();
-	movedBox = boxPos.find(rhs.getMoved());
+    numBoxes = rhs.getNumBoxes();
+    playerPos = rhs.getPlayerPos();
+    boxPos = rhs.getBoxPos();
+    movedBox = boxPos.find(rhs.getMoved());
 }
 
 State& State::operator=(const State& rhs)
 {
-	numBoxes = rhs.getNumBoxes();
-	playerPos = rhs.getPlayerPos();
-	boxPos = rhs.getBoxPos();
-	movedBox = boxPos.find(rhs.getMoved());
-	return (*this);
+    numBoxes = rhs.getNumBoxes();
+    playerPos = rhs.getPlayerPos();
+    boxPos = rhs.getBoxPos();
+    movedBox = boxPos.find(rhs.getMoved());
+    return (*this);
 }
 
 bool State::operator==(const State& rhs) const
 {
-	return (playerPos == rhs.getPlayerPos() && boxPos == rhs.getBoxPos());
+    return (playerPos == rhs.getPlayerPos() && boxPos == rhs.getBoxPos());
 }
 
 bool State::operator<(const State& rhs) const
 {
-	return (playerPos < rhs.getPlayerPos() || 
-		(playerPos == rhs.getPlayerPos() && boxPos < rhs.getBoxPos()));
+    return (playerPos < rhs.getPlayerPos()
+        || (playerPos == rhs.getPlayerPos() && boxPos < rhs.getBoxPos()));
 }
 
 Position State::getPlayerPos() const
 {
-	return static_cast<Position>(playerPos);
+    return static_cast<Position>(playerPos);
 }
 
-set<Position> State::getBoxPos() const
+std::set<Position> State::getBoxPos() const
 {
-	return boxPos;
+    return boxPos;
 }
 
 int State::getNumBoxes() const
 {
-	return numBoxes;
+    return numBoxes;
 }
 
 Position State::getMoved() const
 {
-	return *movedBox;
+    return *movedBox;
 }
 
 void State::setPlayerPos(Position p)
 {
-	playerPos = p;
+    playerPos = p;
 }
 
-void State::setBoxPos(set<Position> p)
+void State::setBoxPos(std::set<Position> p)
 {
-	boxPos = p;
+    boxPos = p;
 }
 
-void State::printState()
+std::ostream& operator<<(std::ostream& os, const State& state)
 {
-	cout << "Player: (" << playerPos.x << "," << playerPos.y << ")\n";
+    os << "Player: (" << state.playerPos.x
+       << "," << state.playerPos.y << ")\n";
 
-	for(set<Position>::iterator it = boxPos.begin(); it != boxPos.end(); ++it)
-	{
-		cout << "(" << it->x << "," << it->y << ")\n";
-	}
+    for(const auto& b : state.boxPos)
+    {
+        os << "(" << b.x << "," << b.y << ")\n";
+    }
 
-	cout << '\n';
+    os << '\n';
+    return os;
 }

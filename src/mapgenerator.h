@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pattern.h"
+#include "position.h"
 #include "map.h"
 #include "util.h"
 

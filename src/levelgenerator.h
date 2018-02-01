@@ -1,13 +1,18 @@
 #pragma once
 
-#include "util.h"
+#include "position.h"
 #include "state.h"
 #include "map.h"
+
+#include <deque>
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 class LevelGenerator
 {
 private:
-
 	int width; // x koord
 	int height; // y koord
 	int numBoxes;
@@ -17,35 +22,35 @@ private:
 	Map m_bestMap;
 	State m_best;
 	int m_max;
-	vector<State> m_bestSolution;
-	string m_solution;
-	set<Position> m_bestGoals;
+	std::vector<State> m_bestSolution;
+	std::string m_solution;
+	std::set<Position> m_bestGoals;
 
 	static const Position direction[];
 
-	set<Position> goals;
+	std::set<Position> goals;
 
-	deque<State> openSet;
-	set<State> checked;
-	map<State, int> closedSet;
-	map<State, State> parents;
+	std::deque<State> openSet;
+	std::set<State> checked;
+	std::map<State, int> closedSet;
+	std::map<State, State> parents;
 
 private:
 
-	vector<Position> initPlayer(set<Position> boxes);
-	Position placePlayer(set<Position> boxes, Position prev);
+	std::vector<Position> initPlayer(std::set<Position> boxes);
+	Position placePlayer(std::set<Position> boxes, Position prev);
 	int floodfill(Position p, Position& min);
 	void placeGoals();
-	vector<State> expand(State s);
+	std::vector<State> expand(State s);
 
 public:
 	LevelGenerator(int w, int h, int n);
-	int generate(vector<char> v);
-	vector<char>& getMap();
+	int generate(std::vector<char> v);
+	std::vector<char>& getMap();
 	void printMap() const;
 	void placeBest();
 	void printBest();
 	void calculateSolution();
-	string getSolution() const;
+	std::string getSolution() const;
 	int getMax() const;
 };

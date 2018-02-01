@@ -224,7 +224,7 @@ bool MapGenerator::checkForDeadEnds()
 
 void MapGenerator::printMap() const
 {
-    charMap.printMap();
+    cout << charMap;
 }
 
 bool MapGenerator::loadPatterns(const string& filename)

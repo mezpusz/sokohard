@@ -14,11 +14,9 @@ CFLAGS = -Wall -O3 -std=c++17 -stdlib=libc++
 # define any directories containing header files other than /usr/include
 INCLUDES = -I.
 
-# define the CXX source files
-SRCS = filewriter.cpp inputparser.cpp levelgenerator.cpp main.cpp map.cpp mapgenerator.cpp pattern.cpp state.cpp
-
-# define the CXX object files 
-OBJS = $(addprefix out/, $(SRCS:.cpp=.o))
+CLASSES = filewriter inputparser levelgenerator main map mapgenerator pattern state
+SRCS = $(addprefix src/, $(addsuffix .cpp, $(CLASSES)))
+OBJS = $(addprefix out/, $(addsuffix .o, $(CLASSES)))
 
 .PHONY: depend clean sokohard
 

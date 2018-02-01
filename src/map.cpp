@@ -7,7 +7,7 @@ void Map::init(int width, int height, char c)
     m_map.resize(width*height, '0');
 }
 
-void Map::init(int width, int height, vector<char> in)
+void Map::init(int width, int height, std::vector<char> in)
 {
     m_width = width;
     m_height = height;
@@ -35,17 +35,17 @@ char& Map::operator()(Position p)
     return m_map[p.y*m_width + p.x];
 }
 
-vector<char>& Map::getMap()
+std::vector<char>& Map::getMap()
 {
     return m_map;
 }
 
-vector<char>::iterator Map::begin()
+std::vector<char>::iterator Map::begin()
 {
     return m_map.begin();
 }
 
-vector<char>::iterator Map::end()
+std::vector<char>::iterator Map::end()
 {
     return m_map.end();
 }
@@ -60,29 +60,30 @@ int Map::height() const
     return m_height;
 }
 
-void Map::printMap() const
+std::ostream& operator<<(std::ostream& os, const Map& map)
 {
-    cout << '\n';
-    for(int i = 0; i < m_width + 2; ++i)
+    os << '\n';
+    for(int i = 0; i < map.m_width + 2; ++i)
     {
-        cout << '#';
+        os << '#';
     }
-    cout << '\n';
-    for(int j = 0; j < m_height; ++j)
+    os << '\n';
+    for(int j = 0; j < map.m_height; ++j)
     {
-        cout << '#';
-        for(int i = 0; i < m_width; ++i)
+        os << '#';
+        for(int i = 0; i < map.m_width; ++i)
         {
-            cout << operator()(i,j);
+            os << map(i,j);
         }
-        cout << '#';
-        cout << '\n';
+        os << '#';
+        os << '\n';
     }
 
-    for(int i = 0; i < m_width + 2; ++i)
+    for(int i = 0; i < map.m_width + 2; ++i)
     {
-        cout << '#';
+        os << '#';
     }
-    cout << '\n';
-    cout << '\n';
+    os << '\n';
+    os << '\n';
+    return os;
 }
