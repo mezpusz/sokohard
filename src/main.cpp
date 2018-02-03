@@ -39,13 +39,6 @@ int main(int argc, char* argv[])
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes);
 
-    std::set<Pattern> p;
-    if (!mgen.loadPatterns("./patterns"))
-    {
-        std::cout << "Could not load patterns from file" << std::endl;
-        return -1;
-    }
-
     int attempt = 1;
     int max = 0;
     int actual;

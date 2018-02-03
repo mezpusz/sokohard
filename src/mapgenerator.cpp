@@ -1,9 +1,9 @@
 #include "mapgenerator.h"
 
+#include "patterns_list.h"
 #include "util.h"
 
 #include <iostream>
-#include <fstream>
 
 MapGenerator::MapGenerator(int w, int h, int m, int n, int num)
     : width(w)
@@ -11,8 +11,19 @@ MapGenerator::MapGenerator(int w, int h, int m, int n, int num)
     , m(m)
     , n(n)
     , numBoxes(num)
+    , patterns()
 {
-    patterns.clear();
+    for (const auto& pattern : patterns_list_3x3)
+    {
+        Pattern pat, p1;
+        pat.Initialize(n,m,pattern);
+
+        for (int r = Rotation::_0; r != Rotation::_270; ++r)
+        {
+            patterns.insert(pat.getPattern(static_cast<Rotation>(r), false));
+            patterns.insert(pat.getPattern(static_cast<Rotation>(r), true));
+        }
+    }
 }
 
 bool MapGenerator::generate()
@@ -230,40 +241,4 @@ bool MapGenerator::checkForDeadEnds()
 void MapGenerator::printMap() const
 {
     std::cout << charMap;
-}
-
-bool MapGenerator::loadPatterns(const std::string& filename)
-{
-    std::ifstream fin(filename, std::ios::binary);
-    if (!fin.is_open())
-    {
-        return false;
-    }
-
-    std::string line;
-    std::string pattern = "";
-
-    while (getline(fin, line))
-    {
-        if (line.size() == 1)
-        {
-            Pattern pat, p1;
-            pat.Initialize(n,m,pattern);
-
-            for (int r = Rotation::_0; r != Rotation::_270; ++r)
-            {
-                patterns.insert(pat.getPattern(static_cast<Rotation>(r), false));
-                patterns.insert(pat.getPattern(static_cast<Rotation>(r), true));
-            }
-
-            pattern = "";
-        }
-        else
-        {
-            pattern += line.substr(0,5);
-        }
-    }
-
-    fin.close();
-    return true;
 }

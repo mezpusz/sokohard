@@ -12,7 +12,6 @@ class MapGenerator
 {
 public:
     MapGenerator(int w, int h, int m, int n, int num);
-    bool loadPatterns(const std::string& filename);
     bool generate();
     std::vector<char>& getMap();
     void printMap() const;
