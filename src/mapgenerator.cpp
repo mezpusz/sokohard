@@ -1,5 +1,7 @@
 #include "mapgenerator.h"
 
+#include "util.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -250,11 +252,8 @@ bool MapGenerator::loadPatterns(const std::string& filename)
 
             for (int r = Rotation::_0; r != Rotation::_270; ++r)
             {
-                pat.getPattern(p1, static_cast<Rotation>(r), false);
-                patterns.insert(p1);
-
-                pat.getPattern(p1, static_cast<Rotation>(r), true);
-                patterns.insert(p1);
+                patterns.insert(pat.getPattern(static_cast<Rotation>(r), false));
+                patterns.insert(pat.getPattern(static_cast<Rotation>(r), true));
             }
 
             pattern = "";

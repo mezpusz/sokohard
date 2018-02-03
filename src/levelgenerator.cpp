@@ -283,10 +283,10 @@ void LevelGenerator::calculateSolution()
 
         if (!(pNext == player))
         {
-            string str;
-            std::deque<pair<Position, string>> d;
+            std::string str;
+            std::deque<std::pair<Position, std::string>> d;
 
-            d.push_back(make_pair(player, string()));
+            d.push_back(make_pair(player, std::string()));
 
             while (!d.empty())
             {
@@ -424,7 +424,7 @@ int LevelGenerator::getMax() const
     return m_max;
 }
 
-string LevelGenerator::getSolution() const
+std::string LevelGenerator::getSolution() const
 {
     return m_solution;
 }
