@@ -2,6 +2,8 @@
 
 #include "util.h"
 
+#include <iostream>
+
 LevelGenerator::LevelGenerator(int w, int h, int n)
     : width(w)
     , height(h)

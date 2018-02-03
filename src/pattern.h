@@ -2,13 +2,16 @@
 
 #include "util.h"
 
+#include <string>
+#include <vector>
+
 class Pattern
 {
 private:
 
     int n;				// height
     int m;				// width
-    vector<char> tiles; 
+    std::vector<char> tiles; 
     // a csempeket tartalmazo vektor
 
 private:
@@ -22,12 +25,12 @@ private:
 public:
 
     Pattern();
-    void Initialize(int n, int m, string in);
+    void Initialize(int n, int m, std::string in);
     // adott n magassag es m szelesseg szerint in alapjan inic.
     void getPattern(Pattern& p, Rotation rotation, bool reflection);
     // p-be a rotation szerinti forgatas es reflection szerinti
     // tukrozessel eloallitja ennek a mintanak a masolatat
-    vector<char>& getPatternAsVector() const;
+    std::vector<char>& getPatternAsVector() const;
     // vektorkent visszaadja a mintazatot
     
     bool match(Pattern p, Join j) const;

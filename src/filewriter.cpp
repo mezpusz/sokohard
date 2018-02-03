@@ -1,16 +1,19 @@
 #include "filewriter.h"
 
-bool FileWriter::writeMapToFile(vector<char> map, int width, int height, const string& filename, const string& solution)
+#include <fstream>
+#include <iostream>
+
+bool FileWriter::writeMapToFile(std::vector<char> map, int width, int height, const std::string& filename, const std::string& solution)
 {
-    ofstream mapFile(filename + ".sok");
-    ofstream solFile(filename + "_solution.sok");
+    std::ofstream mapFile(filename + ".sok");
+    std::ofstream solFile(filename + "_solution.sok");
 
     if(!mapFile.is_open() || !solFile.is_open())
     {
         return false;
     }
 
-    cout << "Writing result map to file...";
+    std::cout << "Writing result map to file...";
 
     map = finalizeMap(map,width,height);
 
@@ -30,15 +33,15 @@ bool FileWriter::writeMapToFile(vector<char> map, int width, int height, const s
     solFile << solution;
     solFile << '\n';
 
-    cout << "completed!\n";
+    std::cout << "completed!\n";
     mapFile.close();
     solFile.close();
     return true;
 }
 
-vector<char> FileWriter::finalizeMap(vector<char> v, int width, int height)
+std::vector<char> FileWriter::finalizeMap(std::vector<char> v, int width, int height)
 {
-    vector<char> out;
+    std::vector<char> out;
     out.clear();
 
     for(int i = 0; i < width + 2; ++i)

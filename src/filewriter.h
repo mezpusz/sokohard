@@ -1,10 +1,11 @@
 #pragma once
 
-#include "util.h"
+#include <string>
+#include <vector>
 
 class FileWriter
 {
 public:
-    static bool writeMapToFile(vector<char> map, int width, int height, const string& filename, const string& solution);
-    static vector<char> finalizeMap(vector<char> map, int width, int height);
+    static bool writeMapToFile(std::vector<char> map, int width, int height, const std::string& filename, const std::string& solution);
+    static std::vector<char> finalizeMap(std::vector<char> map, int width, int height);
 };

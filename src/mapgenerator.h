@@ -3,15 +3,18 @@
 #include "pattern.h"
 #include "position.h"
 #include "map.h"
-#include "util.h"
+
+#include <set>
+#include <string>
+#include <vector>
 
 class MapGenerator
 {
 public:
     MapGenerator(int w, int h, int m, int n, int num);
-    bool loadPatterns(const string& filename);
+    bool loadPatterns(const std::string& filename);
     bool generate();
-    vector<char>& getMap();
+    std::vector<char>& getMap();
     void printMap() const;
 
 private:
@@ -26,7 +29,7 @@ private:
     int m, n;
     int numBoxes;
 
-    set<Pattern> patterns;
+    std::set<Pattern> patterns;
     Map charMap;
-    vector<Pattern> patternMap;
+    std::vector<Pattern> patternMap;
 };

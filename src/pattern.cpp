@@ -4,7 +4,7 @@ Pattern::Pattern()
 {
 }
 
-void Pattern::Initialize(int n, int m, string in)
+void Pattern::Initialize(int n, int m, std::string in)
 {
 	this->n = n;
 	this->m = m;
@@ -34,8 +34,8 @@ void Pattern::getPattern(Pattern& p, Rotation rotation, bool reflection)
 
 void Pattern::rotate(Pattern& p, Rotation r)
 {
-	vector<char> v = p.getPatternAsVector();
-	string s = "";
+	std::vector<char> v = p.getPatternAsVector();
+	std::string s = "";
 
 	switch(r)
 	{
@@ -79,8 +79,8 @@ void Pattern::rotate(Pattern& p, Rotation r)
 
 void Pattern::reflect(Pattern& p)
 {
-	vector<char> v = p.getPatternAsVector();
-	string s = "";
+	std::vector<char> v = p.getPatternAsVector();
+	std::string s = "";
 
 	for(int i = 0; i <= n+1; ++i)
 	{
@@ -93,9 +93,9 @@ void Pattern::reflect(Pattern& p)
 	p.Initialize(n, m, s);
 }
 
-vector<char>& Pattern::getPatternAsVector() const
+std::vector<char>& Pattern::getPatternAsVector() const
 {
-	return const_cast<vector<char>&>(tiles);
+	return const_cast<std::vector<char>&>(tiles);
 }
 
 bool Pattern::match(Pattern p, Join j) const

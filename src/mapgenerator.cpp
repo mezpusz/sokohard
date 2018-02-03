@@ -1,5 +1,8 @@
 #include "mapgenerator.h"
 
+#include <iostream>
+#include <fstream>
+
 MapGenerator::MapGenerator(int w, int h, int m, int n, int num)
     : width(w)
     , height(h)
@@ -66,14 +69,14 @@ bool MapGenerator::generate()
     return true;
 }
 
-vector<char>& MapGenerator::getMap()
+std::vector<char>& MapGenerator::getMap()
 {
     return charMap.getMap();
 }
 
 void MapGenerator::setCharMap(Pattern& p, int i, int j)
 {
-    vector<char> v = p.getPatternAsVector();
+    std::vector<char> v = p.getPatternAsVector();
     for (int k = 0; k < m; ++k)
     {
         for (int l = 0; l < n; ++l)
@@ -224,19 +227,19 @@ bool MapGenerator::checkForDeadEnds()
 
 void MapGenerator::printMap() const
 {
-    cout << charMap;
+    std::cout << charMap;
 }
 
-bool MapGenerator::loadPatterns(const string& filename)
+bool MapGenerator::loadPatterns(const std::string& filename)
 {
-    ifstream fin(filename, ios::binary);
+    std::ifstream fin(filename, std::ios::binary);
     if (!fin.is_open())
     {
         return false;
     }
 
-    string line;
-    string pattern = "";
+    std::string line;
+    std::string pattern = "";
 
     while (getline(fin, line))
     {

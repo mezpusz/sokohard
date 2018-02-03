@@ -1,18 +1,6 @@
 #pragma once
 
-#include <vector>
-#include <set>
-#include <deque>
-#include <map>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
 #include <algorithm>
-
-using namespace std;
 
 enum Rotation
 {
@@ -43,5 +31,5 @@ enum Join
 
 inline int Random(int first, int last)
 {
-    return rand() % (last-first) + first;
+    return std::rand() % (last-first) + first;
 }
