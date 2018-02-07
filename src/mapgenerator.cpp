@@ -75,8 +75,9 @@ bool MapGenerator::generate()
             }
         }
     } 
-    while(!isConnected() || checkForOpenSections() || checkForDeadEnds());
+    while(!isConnected() || checkForOpenSections());
 
+    checkForDeadEnds();
     //printMap();
 
     return true;
@@ -186,7 +187,10 @@ bool MapGenerator::checkForOpenSections()
                     if(y >= 3) x++;
                     y = 0;
                 }
-                if(x >= 4) return true;
+                if(x >= 4)
+                {
+                    return true;
+                }
                 x = 0;
             }
             if(charMap(i,j) == ' ' && i + 3 <= width*m && j + 4 <= height*n)
@@ -202,7 +206,10 @@ bool MapGenerator::checkForOpenSections()
                     if(y >= 4) x++;
                     y = 0;
                 }
-                if(x >= 3) return true;
+                if(x >= 3)
+                {
+                    return true;
+                }
                 x = 0;
             }
         }
@@ -210,18 +217,16 @@ bool MapGenerator::checkForOpenSections()
     return false;
 }
 
-bool MapGenerator::checkForDeadEnds()
+void MapGenerator::checkForDeadEnds()
 {
     for(int i = 0; i < width*m; ++i)
     {
         for(int j = 0; j < height*n; ++j)
         {
-            /* TODO(mezpusz): Find out if it produces better results
             if (charMap(i,j) == '#')
             {
                 continue;
             }
-            */
 
             bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
             bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
@@ -231,11 +236,45 @@ bool MapGenerator::checkForDeadEnds()
             if ((north && south && (west || east))
                 || (west && east && (north || south)))
             {
-                return true;
+                removeDeadEnd(i, j);
             }
         }
     }
-    return false;
+}
+
+void MapGenerator::removeDeadEnd(int i, int j)
+{
+    bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
+    bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
+    bool west = (i-1 < 0 || (charMap(i-1,j) == '#'));
+    bool east = (i+1 >= width*m || (charMap(i+1,j) == '#'));
+
+    if (north && south)
+    {
+        if (west)
+        {
+            charMap(i, j) = '#';
+            removeDeadEnd(i+1, j);
+        }
+        else if (east)
+        {
+            charMap(i, j) = '#';
+            removeDeadEnd(i-1, j);
+        }
+    }
+    else if (west && east)
+    {
+        if (north)
+        {
+            charMap(i, j) = '#';
+            removeDeadEnd(i, j+1);
+        }
+        else if (south)
+        {
+            charMap(i, j) = '#';
+            removeDeadEnd(i, j-1);
+        }
+    }
 }
 
 void MapGenerator::printMap() const

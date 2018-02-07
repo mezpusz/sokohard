@@ -20,7 +20,8 @@ private:
     void setCharMap(Pattern& p, int i, int j);
     bool isConnected();
     bool checkForOpenSections();
-    bool checkForDeadEnds();
+    void checkForDeadEnds();
+    void removeDeadEnd(int i, int j);
     int countConnected(int i, int j);
 
     int width;
