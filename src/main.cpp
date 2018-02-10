@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         outFile = "out";
     }
 
-    std::cout << "Random seed is " << seed << std::endl;
+    std::cout << "Size: " << width*M << "x" << height*N << ", boxes: "
+        << numBoxes << ", seed: " << seed << std::endl;
     srand(seed);
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes, box_changes);
@@ -62,11 +63,9 @@ int main(int argc, char* argv[])
         if(attempt >= 100) break;
     }
 
-    std::cout << "finished!\n\n";
+    std::cout << "finished!" << std::endl;
 
-    std::cout << "Size: " << width*M << "x" << height*N << "\n";
-    std::cout << "Number of boxes: " << numBoxes << "\n";
-    std::cout << "Difficulty (measured as the sum of\nbox lines and box changes): " << max << "\n\n";
+    std::cout << "Difficulty: " << max << std::endl;
 
     lgen.calculateSolution();
     lgen.placeBest();

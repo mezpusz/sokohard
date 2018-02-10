@@ -13,8 +13,6 @@ bool FileWriter::writeMapToFile(std::vector<char> map, int width, int height, co
         return false;
     }
 
-    std::cout << "Writing result map to file...";
-
     map = finalizeMap(map,width,height);
 
     width += 2;
@@ -33,7 +31,6 @@ bool FileWriter::writeMapToFile(std::vector<char> map, int width, int height, co
     solFile << solution;
     solFile << '\n';
 
-    std::cout << "completed!\n";
     mapFile.close();
     solFile.close();
     return true;
