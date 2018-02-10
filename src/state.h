@@ -8,7 +8,7 @@
 class State
 {
 public:
-    State(Position p, std::set<Position> b, Position moved);
+    State(Position player, std::set<Position> boxes, size_t boxChange);
     State(const State& rhs);
     State() = default;
 
@@ -16,23 +16,16 @@ public:
     bool operator==(const State& rhs) const;
     bool operator<(const State& rhs) const;
 
-    Position getPlayerPos() const;
-    std::set<Position> getBoxPos() const;
-    int getNumBoxes() const;
-    Position getMoved() const;
-
-    void setPlayerPos(Position p);
-    void setBoxPos(std::set<Position> p);
+    Position getPlayer() const;
+    std::set<Position> getBoxes() const;
+    size_t getBoxChange() const;
 
     friend std::ostream& operator<<(std::ostream& os, const State& state);
 
 private:
-    int numBoxes;
-
-    std::set<Position> boxPos;
-    Position playerPos;
-
-    std::set<Position>::iterator movedBox;
+    std::set<Position> boxes;
+    Position player;
+    size_t boxChange;
 };
 
 std::ostream& operator<<(std::ostream& os, const State& state);

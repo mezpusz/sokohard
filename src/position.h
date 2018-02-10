@@ -27,7 +27,7 @@ struct Position
         return (*this);
     }
 
-    Position operator+(const Position& rhs)
+    Position operator+(const Position& rhs) const
     {
         return Position(x + rhs.x, y + rhs.y);
     }

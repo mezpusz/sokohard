@@ -42,8 +42,8 @@ int LevelGenerator::generate(std::vector<char> v)
 
     for (const auto& p : playerPositions)
     {
-        openSet.push_back(State(p, ps, Position(-1,-1)));
-        checked.insert(State(p, ps, Position(-1,-1)));
+        openSet.push_back(State(p, ps, 0));
+        checked.insert(State(p, ps, 0));
     }
 
     while(!openSet.empty())
@@ -63,12 +63,8 @@ int LevelGenerator::generate(std::vector<char> v)
             State child = it->first;
             State parent = it->second;
             int pValue = closedSet.find(parent)->second;
-            bool boxChange = (child.getBoxPos().count(parent.getMoved()) != 0);
-            if (boxChange)
-            {
-                pValue+=1;
-            }
-            closedSet.insert(std::pair<State, int>(current, pValue+1));
+            pValue += box_changes ? child.getBoxChange() : 1;
+            closedSet.insert(std::pair<State, int>(current, pValue));
         }
 
         for(const auto& s : states)
@@ -204,39 +200,38 @@ std::vector<State> LevelGenerator::expand(State s)
 
     Map tempMap = m_map;
 
-    Position minPos = s.getPlayerPos();
-    std::set<Position> boxes = s.getBoxPos();
+    Position minPos = s.getPlayer();
+    std::set<Position> boxes = s.getBoxes();
     for(const auto& b : boxes)
     {
         m_map(b) = '$';
     }
-    floodfill(s.getPlayerPos(), minPos);
+    floodfill(s.getPlayer(), minPos);
 
     Map floodedMap = m_map;
     m_map = tempMap;
 
-    for(const auto& b : boxes)
+    for(const auto& box : boxes)
     {
         Position actual;
 
         for(int i = 0; i < 4; ++i)
         {
-            if (b.isInInterval(min,max,direction[i])
-                && floodedMap(b.x + direction[i].x, b.y + direction[i].y) == '_')
+            if (box.isInInterval(min,max,direction[i])
+                && floodedMap(box + direction[i]) == '_')
             {
-                actual = b;
+                actual = box;
                 actual += direction[i];
 
                 while (actual.isInInterval(min,max,direction[i])
                     && floodedMap(actual + direction[i]) == '_')
                 {
                     std::set<Position> ps(boxes.begin(), boxes.end());
-                    Position pushedBox = *(ps.find(b));
+                    auto pushedBox = *(ps.find(box));
                     ps.erase(pushedBox);
-                    pushedBox = actual;
-                    ps.insert(pushedBox);
+                    ps.insert(actual);
                     Position newPlayer = placePlayer(ps, actual + direction[i]);
-                    eStates.push_back(State(newPlayer, ps, pushedBox));
+                    eStates.push_back(State(newPlayer, ps, pushedBox.diff(actual).abs()));
                     actual += direction[i];
                 }
             }
@@ -248,7 +243,7 @@ std::vector<State> LevelGenerator::expand(State s)
 void LevelGenerator::calculateSolution()
 {
     m_solution.clear();
-    Position player = m_bestSolution[0].getPlayerPos();
+    Position player = m_bestSolution[0].getPlayer();
     std::set<Position> boxes;
     std::set<Position> next;
     std::set<Position>::iterator b;
@@ -260,20 +255,24 @@ void LevelGenerator::calculateSolution()
     {
         Map temp = m_bestMap;
 
-        boxes = m_bestSolution[i].getBoxPos();
-        next = m_bestSolution[i+1].getBoxPos();
+        boxes = m_bestSolution[i].getBoxes();
+        next = m_bestSolution[i+1].getBoxes();
 
         for (const auto& b : boxes)
         {
             m_bestMap(b) = '$';
         }
 
-        b = boxes.find(m_bestSolution[i].getMoved());
+        b = boxes.begin();
         n = next.begin();
 
         while (boxes.find(*n) != boxes.end())
         {
             n++;
+        }
+        while (next.find(*b) != next.end())
+        {
+            b++;
         }
 
         Position diff = (*b).diff(*n);
@@ -369,9 +368,9 @@ void LevelGenerator::placeGoals()
 
 void LevelGenerator::placeBest()
 {
-    Position player = m_best.getPlayerPos();
+    Position player = m_best.getPlayer();
 
-    std::set<Position> boxes = m_best.getBoxPos();
+    std::set<Position> boxes = m_best.getBoxes();
 
     for(const auto& goal : m_bestGoals)
     {
@@ -394,8 +393,8 @@ void LevelGenerator::printBest()
     {
         Map temp = m_bestMap;
 
-        Position player = m_bestSolution[i].getPlayerPos();
-        std::set<Position> boxes = m_bestSolution[i].getBoxPos();
+        Position player = m_bestSolution[i].getPlayer();
+        std::set<Position> boxes = m_bestSolution[i].getBoxes();
 
         for(const auto& goal : m_bestGoals)
         {
