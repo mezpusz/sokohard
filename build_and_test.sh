@@ -8,9 +8,12 @@ readonly SEED2x2w3="1517341101"
 readonly SEED3x3w2="1517341110"
 readonly SEED2x2w5="1517341640"
 
-time out/sokohard --width 2 --height 2 --numBoxes 3 --seed ${SEED2x2w3}
-time out/sokohard --width 3 --height 3 --numBoxes 2 --seed ${SEED3x3w2}
-time out/sokohard --width 2 --height 2 --numBoxes 5 --seed ${SEED2x2w5}
+time out/sokohard -w 2 -h 2 -b 3 -s ${SEED2x2w3}
+time out/sokohard -w 3 -h 3 -b 2 -s ${SEED3x3w2}
+time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5}
+time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5} --box-changes
+
+# current bests: 14, 13, 22, 35
 
 #1517341101, 6x6, boxes: 3
 #Difficulty: 20

@@ -19,16 +19,18 @@ int main(int argc, char* argv[])
         outFile;
     int width, height, numBoxes;
     unsigned seed;
+    bool box_changes;
 
     InputParser parser(argc, argv);
-    width = parser.GetOption("--width", widthOption)
+    width = parser.GetOption("-w", widthOption)
             ? stoi(widthOption) : 2;
-    height = parser.GetOption("--height", heightOption)
+    height = parser.GetOption("-h", heightOption)
             ? stoi(heightOption) : 2;
-    numBoxes = parser.GetOption("--numBoxes", numBoxesOption)
+    numBoxes = parser.GetOption("-b", numBoxesOption)
             ? stoi(numBoxesOption) : 2;
-    seed = parser.GetOption("--seed", seedOption)
+    seed = parser.GetOption("-s", seedOption)
             ? stoi(seedOption) : time(nullptr);
+    box_changes = parser.GetBoolOption("--box-changes");
     if (!parser.GetOption("-o", outFile))
     {
         outFile = "out";
@@ -37,7 +39,7 @@ int main(int argc, char* argv[])
     std::cout << "Random seed is " << seed << std::endl;
     srand(seed);
     MapGenerator mgen(width, height, M, N, numBoxes);
-    LevelGenerator lgen(width*M, height*N, numBoxes);
+    LevelGenerator lgen(width*M, height*N, numBoxes, box_changes);
 
     int attempt = 1;
     int max = 0;

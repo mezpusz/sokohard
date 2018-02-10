@@ -13,7 +13,7 @@
 class LevelGenerator
 {
 public:
-    LevelGenerator(int w, int h, int n);
+    LevelGenerator(int w, int h, int n, bool box_changes);
     int generate(std::vector<char> v);
     std::vector<char>& getMap();
     void printMap() const;
@@ -35,6 +35,7 @@ private:
     int width; // x coordinate
     int height; // y coordinate
     int numBoxes;
+    bool box_changes;
     int available;
 
     Map m_map;

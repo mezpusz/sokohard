@@ -4,10 +4,11 @@
 
 #include <iostream>
 
-LevelGenerator::LevelGenerator(int w, int h, int n)
+LevelGenerator::LevelGenerator(int w, int h, int n, bool box_changes)
     : width(w)
     , height(h)
     , numBoxes(n)
+    , box_changes(box_changes)
     , available(0)
     , m_max(0)
 {
@@ -131,7 +132,7 @@ std::vector<Position> LevelGenerator::initPlayer(std::set<Position> boxes)
 
         min = p;
 
-        if(m_map(p) != ' ') 
+        if(m_map(p) != ' ')
         {
             continue;
         }

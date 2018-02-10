@@ -19,3 +19,9 @@ bool InputParser::GetOption(const std::string& option, std::string& value) const
     }
     return false;
 }
+
+bool InputParser::GetBoolOption(const std::string& option) const
+{
+    return std::find(tokens_.begin(), tokens_.end(), option)
+        != tokens_.end();
+}
