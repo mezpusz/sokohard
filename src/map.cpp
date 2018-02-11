@@ -1,5 +1,7 @@
 #include "map.h"
 
+#include "map_elements.h"
+
 void Map::init(int width, int height, char c)
 {
     m_width = width;
@@ -65,23 +67,23 @@ std::ostream& operator<<(std::ostream& os, const Map& map)
     os << '\n';
     for(int i = 0; i < map.m_width + 2; ++i)
     {
-        os << '#';
+        os << WALL;
     }
     os << '\n';
     for(int j = 0; j < map.m_height; ++j)
     {
-        os << '#';
+        os << WALL;
         for(int i = 0; i < map.m_width; ++i)
         {
             os << map(i,j);
         }
-        os << '#';
+        os << WALL;
         os << '\n';
     }
 
     for(int i = 0; i < map.m_width + 2; ++i)
     {
-        os << '#';
+        os << WALL;
     }
     os << '\n';
     os << '\n';

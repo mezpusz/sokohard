@@ -1,5 +1,7 @@
 #include "filewriter.h"
 
+#include "map_elements.h"
+
 #include <fstream>
 #include <iostream>
 
@@ -41,51 +43,51 @@ std::vector<char> FileWriter::finalizeMap(std::vector<char> v, size_t width, siz
 
     for(size_t i = 0; i < width + 2; ++i)
     {
-        out.push_back(' ');
+        out.push_back(EMPTY);
     }
     for(size_t j = 0; j < height; ++j)
     {
-        out.push_back(' ');
+        out.push_back(EMPTY);
         for(size_t i = 0; i < width; ++i)
         {
             out.push_back(v[j*width + i]);
         }
-        out.push_back(' ');
+        out.push_back(EMPTY);
     }
     for(size_t i = 0; i < width + 2; ++i)
     {
-        out.push_back(' ');
+        out.push_back(EMPTY);
     }
 
     for(size_t i = 1; i <= width; ++i)
     {
-        if(out[width + 2 + i] != '#')
+        if(out[width + 2 + i] != WALL)
         {
-            out[i-1]	= '#';
-            out[i]		= '#';
-            out[i+1]	= '#';
+            out[i-1]	= WALL;
+            out[i]		= WALL;
+            out[i+1]	= WALL;
         }
-        if(out[(height)*(width + 2) + i] != '#')
+        if(out[(height)*(width + 2) + i] != WALL)
         {
-            out[(height+1)*(width + 2) + i-1]	= '#';
-            out[(height+1)*(width + 2) + i]		= '#';
-            out[(height+1)*(width + 2) + i+1]	= '#';
+            out[(height+1)*(width + 2) + i-1]	= WALL;
+            out[(height+1)*(width + 2) + i]		= WALL;
+            out[(height+1)*(width + 2) + i+1]	= WALL;
         }
     }
 
     for(size_t i = 1; i <= height; ++i)
     {
-        if(out[i*(width + 2) + 1] != '#')
+        if(out[i*(width + 2) + 1] != WALL)
         {
-            out[(i-1)*(width + 2)]	= '#';
-            out[i*(width + 2)]		= '#';
-            out[(i+1)*(width + 2)]	= '#';
+            out[(i-1)*(width + 2)]	= WALL;
+            out[i*(width + 2)]		= WALL;
+            out[(i+1)*(width + 2)]	= WALL;
         }
-        if(out[i*(width + 2) + width] != '#')
+        if(out[i*(width + 2) + width] != WALL)
         {
-            out[(i-1)*(width + 2) + width + 1]	= '#';
-            out[i*(width + 2) + width + 1]		= '#';
-            out[(i+1)*(width + 2) + width + 1]	= '#';
+            out[(i-1)*(width + 2) + width + 1]	= WALL;
+            out[i*(width + 2) + width + 1]		= WALL;
+            out[(i+1)*(width + 2) + width + 1]	= WALL;
         }
     }
 

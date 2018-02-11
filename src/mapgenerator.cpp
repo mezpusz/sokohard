@@ -1,5 +1,6 @@
 #include "mapgenerator.h"
 
+#include "map_elements.h"
 #include "patterns_list.h"
 #include "util.h"
 
@@ -110,7 +111,7 @@ bool MapGenerator::isConnected()
     {
         for(int j = 0; j < height*n; ++j)
         {
-            if(charMap(i,j) == ' ') floors++;
+            if(charMap(i,j) == EMPTY) floors++;
         }
     }
 
@@ -125,7 +126,7 @@ bool MapGenerator::isConnected()
     {
         for (int j = 0; j < height*n; ++j)
         {
-            if (charMap(i,j) == ' ')
+            if (charMap(i,j) == EMPTY)
             {
                 result = countConnected(i,j);
                 break;
@@ -142,7 +143,7 @@ bool MapGenerator::isConnected()
 int MapGenerator::countConnected(int i, int j)
 {
     int result = 0;
-    if(charMap(i,j) == ' ')
+    if(charMap(i,j) == EMPTY)
     {
         charMap(i,j) = '_';
         result++;
@@ -175,13 +176,13 @@ bool MapGenerator::checkForOpenSections()
     {
         for(int j = 0; j < height*n; ++j)
         {
-            if(charMap(i,j) == ' ' && i + 4 <= width*m && j + 3 <= height*n)
+            if(charMap(i,j) == EMPTY && i + 4 <= width*m && j + 3 <= height*n)
             {
                 for(int k = i; k < i + 4; ++k)
                 {
                     for(int l = j; l < j + 3; ++l)
                     {
-                        if(charMap(k,l) == ' ') y++;
+                        if(charMap(k,l) == EMPTY) y++;
                         else break;
                     }
                     if(y >= 3) x++;
@@ -193,13 +194,13 @@ bool MapGenerator::checkForOpenSections()
                 }
                 x = 0;
             }
-            if(charMap(i,j) == ' ' && i + 3 <= width*m && j + 4 <= height*n)
+            if(charMap(i,j) == EMPTY && i + 3 <= width*m && j + 4 <= height*n)
             {
                 for(int k = i; k < i + 3; ++k)
                 {
                     for(int l = j; l < j + 4; ++l)
                     {
-                        if(charMap(k,l) == ' ') y++;
+                        if(charMap(k,l) == EMPTY) y++;
                         else break;
                     }
 
@@ -223,15 +224,15 @@ void MapGenerator::checkForDeadEnds()
     {
         for(int j = 0; j < height*n; ++j)
         {
-            if (charMap(i,j) == '#')
+            if (charMap(i,j) == WALL)
             {
                 continue;
             }
 
-            bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
-            bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
-            bool west = (i-1 < 0 || (charMap(i-1,j) == '#'));
-            bool east = (i+1 >= width*m || (charMap(i+1,j) == '#'));
+            bool north = (j-1 < 0 || (charMap(i,j-1) == WALL));
+            bool south = (j+1 >= height*n || (charMap(i,j+1) == WALL));
+            bool west = (i-1 < 0 || (charMap(i-1,j) == WALL));
+            bool east = (i+1 >= width*m || (charMap(i+1,j) == WALL));
 
             if ((north && south && (west || east))
                 || (west && east && (north || south)))
@@ -244,21 +245,21 @@ void MapGenerator::checkForDeadEnds()
 
 void MapGenerator::removeDeadEnd(int i, int j)
 {
-    bool north = (j-1 < 0 || (charMap(i,j-1) == '#'));
-    bool south = (j+1 >= height*n || (charMap(i,j+1) == '#'));
-    bool west = (i-1 < 0 || (charMap(i-1,j) == '#'));
-    bool east = (i+1 >= width*m || (charMap(i+1,j) == '#'));
+    bool north = (j-1 < 0 || (charMap(i,j-1) == WALL));
+    bool south = (j+1 >= height*n || (charMap(i,j+1) == WALL));
+    bool west = (i-1 < 0 || (charMap(i-1,j) == WALL));
+    bool east = (i+1 >= width*m || (charMap(i+1,j) == WALL));
 
     if (north && south)
     {
         if (west)
         {
-            charMap(i, j) = '#';
+            charMap(i, j) = WALL;
             removeDeadEnd(i+1, j);
         }
         else if (east)
         {
-            charMap(i, j) = '#';
+            charMap(i, j) = WALL;
             removeDeadEnd(i-1, j);
         }
     }
@@ -266,12 +267,12 @@ void MapGenerator::removeDeadEnd(int i, int j)
     {
         if (north)
         {
-            charMap(i, j) = '#';
+            charMap(i, j) = WALL;
             removeDeadEnd(i, j+1);
         }
         else if (south)
         {
-            charMap(i, j) = '#';
+            charMap(i, j) = WALL;
             removeDeadEnd(i, j-1);
         }
     }
