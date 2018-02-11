@@ -13,43 +13,47 @@
 class LevelGenerator
 {
 public:
-    LevelGenerator(int w, int h, int n, bool box_changes);
-    int generate(std::vector<char> v);
+    LevelGenerator(size_t w, size_t h, size_t n, bool box_changes);
+    size_t generate(std::vector<char> v);
     std::vector<char>& getMap();
     void printMap() const;
     void placeBest();
     void printBest();
     void calculateSolution();
     std::string getSolution() const;
-    int getMax() const;
+    size_t getMax() const;
 
 private:
     std::vector<Position> initPlayer(std::set<Position> boxes);
     Position placePlayer(std::set<Position> boxes, Position prev);
-    int floodfill(Position p, Position& min);
+    size_t floodfill(Position p, Position& min);
     void placeGoals();
     std::vector<State> expand(State s);
     
     static const Position direction[];
 
-    int width; // x coordinate
-    int height; // y coordinate
-    int numBoxes;
+    size_t width; // x coordinate
+    size_t height; // y coordinate
+    size_t numBoxes;
     bool box_changes;
-    int available;
+    size_t available;
 
     Map m_map;
     Map m_bestMap;
     State m_best;
-    int m_max;
+    size_t m_max;
     std::vector<State> m_bestSolution;
     std::string m_solution;
     std::set<Position> m_bestGoals;
 
     std::set<Position> goals;
 
+    // Not yet processed states
     std::deque<State> openSet;
+    // Set to know which states have we encountered
     std::set<State> checked;
-    std::map<State, int> closedSet;
+    // Processed states with their value
+    std::map<State, size_t> closedSet;
+    // Map to store each state's parent
     std::map<State, State> parents;
 };

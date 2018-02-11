@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     std::string widthOption, heightOption, numBoxesOption,
         seedOption,
         outFile;
-    int width, height, numBoxes;
+    size_t width, height, numBoxes;
     unsigned seed;
     bool box_changes;
 
@@ -42,9 +42,9 @@ int main(int argc, char* argv[])
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes, box_changes);
 
-    int attempt = 1;
-    int max = 0;
-    int actual;
+    size_t attempt = 1;
+    size_t max = 0;
+    size_t actual;
 
     std::cout << "Generating level";
 

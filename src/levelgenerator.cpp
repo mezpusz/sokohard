@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-LevelGenerator::LevelGenerator(int w, int h, int n, bool box_changes)
+LevelGenerator::LevelGenerator(size_t w, size_t h, size_t n, bool box_changes)
     : width(w)
     , height(h)
     , numBoxes(n)
@@ -14,7 +14,7 @@ LevelGenerator::LevelGenerator(int w, int h, int n, bool box_changes)
 {
 }
 
-int LevelGenerator::generate(std::vector<char> v)
+size_t LevelGenerator::generate(std::vector<char> v)
 {
     available = 0;
 
@@ -52,22 +52,21 @@ int LevelGenerator::generate(std::vector<char> v)
         State current = openSet.front();
         openSet.pop_front();
 
-        auto states = expand(current);
-
         auto it = parents.find(current);
         if (it == parents.end())
         {
-            closedSet.insert(std::pair<State, int>(current, 0));
+            closedSet.insert(std::pair<State, size_t>(current, 0));
         }
         else
         {
             State child = it->first;
             State parent = it->second;
-            int pValue = closedSet.find(parent)->second;
+            size_t pValue = closedSet.find(parent)->second;
             pValue += box_changes ? child.getBoxChange() : 1;
-            closedSet.insert(std::pair<State, int>(current, pValue));
+            closedSet.insert(std::pair<State, size_t>(current, pValue));
         }
 
+        auto states = expand(current);
         for(const auto& s : states)
         {
             if (checked.count(s) == 0)
@@ -79,7 +78,7 @@ int LevelGenerator::generate(std::vector<char> v)
         }
     }
 
-    int max = 0;
+    size_t max = 0;
     State best;
 
     for(const auto& [state,value] : closedSet)
@@ -114,7 +113,7 @@ int LevelGenerator::generate(std::vector<char> v)
 
 std::vector<Position> LevelGenerator::initPlayer(std::set<Position> boxes)
 {
-    int count = 0;
+    size_t count = 0;
     std::vector<Position> pos;
     Position p, min;
 
@@ -146,7 +145,7 @@ std::vector<Position> LevelGenerator::initPlayer(std::set<Position> boxes)
 
 Position LevelGenerator::placePlayer(std::set<Position> boxes, Position prev)
 {
-    int count = 0;
+    size_t count = 0;
     Position min;
 
     Map tempMap = m_map;
@@ -163,7 +162,7 @@ Position LevelGenerator::placePlayer(std::set<Position> boxes, Position prev)
     return min;
 }
 
-int LevelGenerator::floodfill(Position p, Position& min)
+size_t LevelGenerator::floodfill(Position p, Position& min)
 {
     if (p.x < 0 || p.x >= width
         || p.y < 0 || p.y >= height
@@ -172,7 +171,7 @@ int LevelGenerator::floodfill(Position p, Position& min)
         return 0;
     }
     
-    int c = 1;
+    size_t c = 1;
     if (p < min)
     {
         min = p;
@@ -216,7 +215,7 @@ std::vector<State> LevelGenerator::expand(State s)
     {
         Position actual;
 
-        for(int i = 0; i < 4; ++i)
+        for(size_t i = 0; i < 4; ++i)
         {
             if (box.isInInterval(min,max,direction[i])
                 && floodedMap(box + direction[i]) == '_')
@@ -252,7 +251,7 @@ void LevelGenerator::calculateSolution()
     char s[] = "RLDU";
     char s1[] = "rldu";
 
-    for (unsigned int i = 0; i < m_bestSolution.size()-1; ++i)
+    for (size_t i = 0; i < m_bestSolution.size()-1; ++i)
     {
         Map temp = m_bestMap;
 
@@ -299,7 +298,7 @@ void LevelGenerator::calculateSolution()
                     break;
                 }
 
-                for (int i = 0; i < 4; ++i)
+                for (size_t i = 0; i < 4; ++i)
                 {
                     if (p.first.isInInterval(Position(0,0),Position(width,height),direction[i])
                         && m_bestMap(p.first + direction[i]) == ' ')
@@ -313,11 +312,11 @@ void LevelGenerator::calculateSolution()
             player = pNext;
         }
 
-        for(int i = 0; i < 4; ++i)
+        for(size_t i = 0; i < 4; ++i)
         {
             if(norm == direction[i])
             {
-                for(int j = 0; j < diff.abs(); ++j)
+                for(size_t j = 0; j < diff.abs(); ++j)
                 {
                     m_solution += s[i];
                 }
@@ -332,7 +331,7 @@ void LevelGenerator::calculateSolution()
 
 void LevelGenerator::placeGoals()
 {
-    int count;
+    size_t count;
     bool success = false;
     Position p;
     std::set<Position> pos;
@@ -419,7 +418,7 @@ void LevelGenerator::printMap() const
     std::cout << m_map;
 }
 
-int LevelGenerator::getMax() const
+size_t LevelGenerator::getMax() const
 {
     return m_max;
 }

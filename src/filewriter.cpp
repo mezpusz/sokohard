@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 
-bool FileWriter::writeMapToFile(std::vector<char> map, int width, int height, const std::string& filename, const std::string& solution)
+bool FileWriter::writeMapToFile(std::vector<char> map, size_t width, size_t height, const std::string& filename, const std::string& solution)
 {
     std::ofstream mapFile(filename + ".sok");
     std::ofstream solFile(filename + "_solution.sok");
@@ -18,48 +18,46 @@ bool FileWriter::writeMapToFile(std::vector<char> map, int width, int height, co
     width += 2;
     height += 2;
 
-    for(int j = 0; j < height; ++j)
+    for(size_t j = 0; j < height; ++j)
     {
-        for(int i = 0; i < width; ++i)
+        for(size_t i = 0; i < width; ++i)
         {
             mapFile << map[j*width + i];
         }
-        mapFile << '\n';
+        mapFile << std::endl;
     }
-    mapFile << '\n';
 
-    solFile << solution;
-    solFile << '\n';
+    solFile << solution << std::endl;
 
     mapFile.close();
     solFile.close();
     return true;
 }
 
-std::vector<char> FileWriter::finalizeMap(std::vector<char> v, int width, int height)
+std::vector<char> FileWriter::finalizeMap(std::vector<char> v, size_t width, size_t height)
 {
     std::vector<char> out;
     out.clear();
 
-    for(int i = 0; i < width + 2; ++i)
+    for(size_t i = 0; i < width + 2; ++i)
     {
         out.push_back(' ');
     }
-    for(int j = 0; j < height; ++j)
+    for(size_t j = 0; j < height; ++j)
     {
         out.push_back(' ');
-        for(int i = 0; i < width; ++i)
+        for(size_t i = 0; i < width; ++i)
         {
             out.push_back(v[j*width + i]);
         }
         out.push_back(' ');
     }
-    for(int i = 0; i < width + 2; ++i)
+    for(size_t i = 0; i < width + 2; ++i)
     {
         out.push_back(' ');
     }
 
-    for(int i = 1; i <= width; ++i)
+    for(size_t i = 1; i <= width; ++i)
     {
         if(out[width + 2 + i] != '#')
         {
@@ -75,7 +73,7 @@ std::vector<char> FileWriter::finalizeMap(std::vector<char> v, int width, int he
         }
     }
 
-    for(int i = 1; i <= height; ++i)
+    for(size_t i = 1; i <= height; ++i)
     {
         if(out[i*(width + 2) + 1] != '#')
         {
