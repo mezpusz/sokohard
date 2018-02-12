@@ -8,10 +8,12 @@ readonly SEED2x2w3="1517341101"
 readonly SEED3x3w2="1517341110"
 readonly SEED2x2w5="1517341640"
 
-time out/sokohard -w 2 -h 2 -b 3 -s ${SEED2x2w3}
-time out/sokohard -w 3 -h 3 -b 2 -s ${SEED3x3w2}
-time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5}
-time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5} --box-changes
+time out/sokohard -w 2 -h 2 -b 3 -s ${SEED2x2w3}               # 14
+time out/sokohard -w 2 -h 2 -b 3 -s ${SEED2x2w3} --box-changes # 24
+time out/sokohard -w 3 -h 3 -b 2 -s ${SEED3x3w2}               # 13
+time out/sokohard -w 3 -h 3 -b 2 -s ${SEED3x3w2} --box-changes # 40
+time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5}               # 22
+time out/sokohard -w 2 -h 2 -b 5 -s ${SEED2x2w5} --box-changes # 35
 
 # current bests: 14, 13, 22, 35
 
