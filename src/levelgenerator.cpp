@@ -10,42 +10,29 @@ LevelGenerator::LevelGenerator(size_t w, size_t h, size_t n, bool box_changes)
     , height(h)
     , numBoxes(n)
     , box_changes(box_changes)
-    , available(0)
+    , positionSelector(w, h, n)
     , m_max(0)
 {
 }
 
 size_t LevelGenerator::generate(std::vector<char> v)
 {
-    available = 0;
-
+    positionSelector.init(v);
     m_map.init(width, height, v);
-
-    for(const auto& c : m_map)
-    {
-        if(c == EMPTY)
-        {
-            available++;
-        }
-    }
 
     closedSet.clear();
     parents.clear();
     openSet.clear();
     checked.clear();
 
-    placeGoals();
+    goals = positionSelector.placeGoals();
 
-    std::set<Position> ps;
-
-    ps.insert(goals.begin(), goals.end());
-
-    const auto playerPositions = initPlayer(ps);
+    const auto playerPositions = positionSelector.initPlayer(goals);
 
     for (const auto& p : playerPositions)
     {
-        openSet.push_back(State(p, ps, 0));
-        checked.insert(State(p, ps, 0));
+        openSet.push_back(State(p, goals, 0));
+        checked.insert(State(p, goals, 0));
     }
 
     while(!openSet.empty())
@@ -110,57 +97,6 @@ size_t LevelGenerator::generate(std::vector<char> v)
     }
 
     return max;
-}
-
-std::vector<Position> LevelGenerator::initPlayer(std::set<Position> boxes)
-{
-    size_t count = 0;
-    std::vector<Position> pos;
-    Position p, min;
-
-    Map tempMap = m_map;
-
-    for(const auto& b : boxes)
-    {
-        m_map(b) = BOX;
-    }
-
-    while(count != available - numBoxes)
-    {
-        p.x = Random(0, width);
-        p.y = Random(0, height);
-
-        min = p;
-
-        if(m_map(p) != EMPTY)
-        {
-            continue;
-        }
-        count += floodfill(p, min);
-        pos.push_back(min);
-    }
-    m_map = tempMap;
-
-    return pos;
-}
-
-Position LevelGenerator::placePlayer(std::set<Position> boxes, Position prev)
-{
-    size_t count = 0;
-    Position min;
-
-    Map tempMap = m_map;
-
-    for(const auto& b : boxes)
-    {
-        m_map(b) = BOX;
-    }
-
-    min = prev;
-    count += floodfill(prev, min);
-    m_map = tempMap;
-
-    return min;
 }
 
 size_t LevelGenerator::floodfill(Position p, Position& min)
@@ -231,7 +167,7 @@ std::vector<State> LevelGenerator::expand(State s)
                     auto pushedBox = *(ps.find(box));
                     ps.erase(pushedBox);
                     ps.insert(actual);
-                    Position newPlayer = placePlayer(ps, actual + direction[i]);
+                    Position newPlayer = positionSelector.placePlayer(ps, actual + direction[i]);
                     result.push_back(State(newPlayer, ps, pushedBox.diff(actual).abs()));
                     actual += direction[i];
                 }
@@ -328,43 +264,6 @@ void LevelGenerator::calculateSolution()
 
         m_bestMap = temp;
     }
-}
-
-void LevelGenerator::placeGoals()
-{
-    size_t count;
-    bool success = false;
-    Position p;
-    std::set<Position> pos;
-
-    goals.clear();
-
-    while (!success)
-    {
-        p = Position(Random(0,width),Random(0,height));
-
-        count = 0;
-        pos.clear();
-
-        while (m_map(p) == EMPTY
-            && pos.find(p) == pos.end())
-        {
-            count++;
-            pos.insert(p);
-            p += direction[Random(0,4)];
-            if (!p.isInInterval(Position(0,0),Position(width,height),Position(0,0)))
-            {
-                break;
-            }
-            if (count == numBoxes)
-            {
-                success = true;
-                break;
-            }
-        }
-    }
-
-    goals = pos;
 }
 
 void LevelGenerator::placeBest()

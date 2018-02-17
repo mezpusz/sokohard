@@ -2,6 +2,7 @@
 
 #include "map.h"
 #include "position.h"
+#include "positionselector.h"
 #include "state.h"
 
 #include <deque>
@@ -24,19 +25,15 @@ public:
     size_t getMax() const;
 
 private:
-    std::vector<Position> initPlayer(std::set<Position> boxes);
-    Position placePlayer(std::set<Position> boxes, Position prev);
     size_t floodfill(Position p, Position& min);
-    void placeGoals();
     std::vector<State> expand(State s);
     
     static const Position direction[];
 
-    size_t width; // x coordinate
-    size_t height; // y coordinate
-    size_t numBoxes;
+    size_t width;
+    size_t height;
     bool box_changes;
-    size_t available;
+    PositionSelector positionSelector;
 
     Map m_map;
     Map m_bestMap;
