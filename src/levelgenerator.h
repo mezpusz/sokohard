@@ -23,8 +23,10 @@ public:
     void printBest();
     void calculateSolution();
     std::string getSolution() const;
+    size_t getMax() const;
 
 private:
+    size_t updateBest(std::set<Position> goals);
     size_t floodfill(Position p, Position& min);
     std::vector<State> expand(State s);
 
@@ -43,7 +45,7 @@ private:
     // Set to know which states have we encountered
     std::set<State> checked;
     // Processed states with their value
-    std::map<State, size_t> closedSet;
+    std::map<State, size_t> m_closedSet;
     // Map to store each state's parent
     std::map<State, State> parents;
 };

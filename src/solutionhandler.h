@@ -12,7 +12,7 @@ class SolutionHandler
 {
 public:
     SolutionHandler();
-    void init(Map map, std::set<Position> goals, std::vector<State> states);
+    void update(Map map, std::set<Position> goals, std::vector<State> states);
     Map placeBest();
     void printBest();
     std::string calculateSolution();

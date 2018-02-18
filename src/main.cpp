@@ -43,8 +43,6 @@ int main(int argc, char* argv[])
     LevelGenerator lgen(width*M, height*N, numBoxes, box_changes);
 
     size_t attempt = 1;
-    size_t max = 0;
-    size_t actual;
 
     std::cout << "Generating level";
 
@@ -54,9 +52,7 @@ int main(int argc, char* argv[])
     
         while(true)
         {
-            actual = lgen.generate(mgen.getMap());
-            if(max < actual) max = actual;
-            //cout << "Attempt " << attempt << ", actual result: " << actual << ", best: " << max << "\n";
+            lgen.generate(mgen.getMap());
             std::cout << "." << std::flush;
             if(attempt++ % 5 == 0) break;
         }
@@ -65,7 +61,7 @@ int main(int argc, char* argv[])
 
     std::cout << "finished!" << std::endl;
 
-    std::cout << "Difficulty: " << max << std::endl;
+    std::cout << "Difficulty: " << lgen.getMax() << std::endl;
 
     lgen.calculateSolution();
 

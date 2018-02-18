@@ -13,7 +13,7 @@ SolutionHandler::SolutionHandler()
 {
 }
 
-void SolutionHandler::init(Map map, std::set<Position> goals, std::vector<State> states)
+void SolutionHandler::update(Map map, std::set<Position> goals, std::vector<State> states)
 {
     m_map = map;
     m_goals = goals;

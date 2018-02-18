@@ -20,7 +20,7 @@ size_t LevelGenerator::generate(std::vector<char> v)
     positionSelector.init(v);
     m_map.init(width, height, v);
 
-    closedSet.clear();
+    m_closedSet.clear();
     parents.clear();
     openSet.clear();
     checked.clear();
@@ -42,15 +42,15 @@ size_t LevelGenerator::generate(std::vector<char> v)
         auto it = parents.find(current);
         if (it == parents.end())
         {
-            closedSet.insert(std::pair<State, size_t>(current, 0));
+            m_closedSet.insert(std::pair<State, size_t>(current, 0));
         }
         else
         {
             State child = it->first;
             State parent = it->second;
-            size_t pValue = closedSet.find(parent)->second;
+            size_t pValue = m_closedSet.find(parent)->second;
             pValue += box_changes ? child.getBoxChange() : 1;
-            closedSet.insert(std::pair<State, size_t>(current, pValue));
+            m_closedSet.insert(std::pair<State, size_t>(current, pValue));
         }
 
         auto states = expand(current);
@@ -65,10 +65,15 @@ size_t LevelGenerator::generate(std::vector<char> v)
         }
     }
 
+    return updateBest(goals);
+}
+
+size_t LevelGenerator::updateBest(std::set<Position> goals)
+{
     size_t max = 0;
     State best;
 
-    for(const auto& [state,value] : closedSet)
+    for(const auto& [state,value] : m_closedSet)
     {
         if(value >= max)
         {
@@ -88,9 +93,8 @@ size_t LevelGenerator::generate(std::vector<char> v)
             states.push_back(parents.find(t)->second);
             t = parents.find(t)->second;
         }
-        solutionHandler.init(m_map, goals, states);
+        solutionHandler.update(m_map, goals, states);
     }
-
     return max;
 }
 
@@ -190,6 +194,11 @@ void LevelGenerator::printBest()
 void LevelGenerator::printMap() const
 {
     std::cout << m_map;
+}
+
+size_t LevelGenerator::getMax() const
+{
+    return m_max;
 }
 
 std::string LevelGenerator::getSolution() const
