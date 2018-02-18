@@ -78,13 +78,13 @@ std::string SolutionHandler::calculateSolution()
                     break;
                 }
 
-                for (size_t i = 0; i < 4; ++i)
+                for (size_t j = 0; j < 4; ++j)
                 {
-                    if (p.first.isInInterval(Position(0,0),Position(m_map.width(),m_map.height()),direction[i])
-                        && m_map(p.first + direction[i]) == EMPTY)
+                    if (p.first.isInInterval(Position(0,0),Position(m_map.width(),m_map.height()),directions[j])
+                        && m_map(p.first + directions[j]) == EMPTY)
                     {
-                        m_map(p.first + direction[i]) = '_';
-                        d.push_back(make_pair(p.first + direction[i],p.second + moves[i]));
+                        m_map(p.first + directions[j]) = '_';
+                        d.push_back(make_pair(p.first + directions[j],p.second + moves[j]));
                     }
                 }
             }
@@ -92,13 +92,13 @@ std::string SolutionHandler::calculateSolution()
             player = pNext;
         }
 
-        for(size_t i = 0; i < 4; ++i)
+        for(size_t j = 0; j < 4; ++j)
         {
-            if(norm == direction[i])
+            if(norm == directions[j])
             {
-                for(size_t j = 0; j < diff.abs(); ++j)
+                for(size_t k = 0; k < diff.abs(); ++k)
                 {
-                    solution += pushes[i];
+                    solution += pushes[j];
                 }
                 player += diff;
                 break;

@@ -36,7 +36,7 @@ size_t LevelGenerator::generate(std::vector<char> v)
 
     while(!openSet.empty())
     {
-        State current = openSet.front();
+        const State current = openSet.front();
         openSet.pop_front();
 
         auto it = parents.find(current);
@@ -124,7 +124,7 @@ std::vector<char>& LevelGenerator::getMap()
     return m_map.getMap();
 }
 
-std::vector<State> LevelGenerator::expand(State s)
+std::vector<State> LevelGenerator::expand(const State s)
 {
     std::vector<State> result;
     const Position min(0,0);
@@ -147,24 +147,24 @@ std::vector<State> LevelGenerator::expand(State s)
     {
         Position actual;
 
-        for(size_t i = 0; i < 4; ++i)
+        for(const auto& direction : directions)
         {
-            if (box.isInInterval(min,max,direction[i])
-                && floodedMap(box + direction[i]) == '_')
+            if (box.isInInterval(min,max,direction)
+                && floodedMap(box + direction) == '_')
             {
                 actual = box;
-                actual += direction[i];
+                actual += direction;
 
-                while (actual.isInInterval(min,max,direction[i])
-                    && floodedMap(actual + direction[i]) == '_')
+                while (actual.isInInterval(min,max,direction)
+                    && floodedMap(actual + direction) == '_')
                 {
                     std::set<Position> ps(boxes.begin(), boxes.end());
                     auto pushedBox = *(ps.find(box));
                     ps.erase(pushedBox);
                     ps.insert(actual);
-                    Position newPlayer = positionSelector.placePlayer(ps, actual + direction[i]);
+                    Position newPlayer = positionSelector.placePlayer(ps, actual + direction);
                     result.push_back(State(newPlayer, ps, pushedBox.diff(actual).abs()));
-                    actual += direction[i];
+                    actual += direction;
                 }
             }
         }

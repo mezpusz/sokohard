@@ -98,7 +98,7 @@ std::set<Position> PositionSelector::placeGoals()
         {
             count++;
             positions.insert(p);
-            p += direction[Random(0,4)];
+            p += directions[Random(0,4)];
             if (!p.isInInterval(Position(0,0),Position(width,height),Position(0,0)))
             {
                 break;
