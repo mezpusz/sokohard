@@ -26,7 +26,6 @@ size_t LevelGenerator::generate(std::vector<char> v)
     checked.clear();
 
     auto goals = positionSelector.placeGoals();
-
     const auto playerPositions = positionSelector.initPlayer(goals);
 
     for (const auto& p : playerPositions)
@@ -191,11 +190,6 @@ void LevelGenerator::printBest()
 void LevelGenerator::printMap() const
 {
     std::cout << m_map;
-}
-
-size_t LevelGenerator::getMax() const
-{
-    return m_max;
 }
 
 std::string LevelGenerator::getSolution() const

@@ -23,7 +23,6 @@ public:
     void printBest();
     void calculateSolution();
     std::string getSolution() const;
-    size_t getMax() const;
 
 private:
     size_t floodfill(Position p, Position& min);

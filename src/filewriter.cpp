@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-bool FileWriter::writeMapToFile(std::vector<char> map, size_t width, size_t height, const std::string& filename, const std::string& solution)
+bool FileWriter::writeMapToFile(Map map, const std::string& filename, const std::string& solution)
 {
     std::ofstream mapFile(filename + ".sok");
     std::ofstream solFile(filename + "_solution.sok");
@@ -15,7 +15,8 @@ bool FileWriter::writeMapToFile(std::vector<char> map, size_t width, size_t heig
         return false;
     }
 
-    map = finalizeMap(map,width,height);
+    auto width = map.width(), height = map.height();
+    std::vector<char> charMap = finalizeMap(map.getMap(), width, height);
 
     width += 2;
     height += 2;
@@ -24,7 +25,7 @@ bool FileWriter::writeMapToFile(std::vector<char> map, size_t width, size_t heig
     {
         for(size_t i = 0; i < width; ++i)
         {
-            mapFile << map[j*width + i];
+            mapFile << charMap[j*width + i];
         }
         mapFile << std::endl;
     }
