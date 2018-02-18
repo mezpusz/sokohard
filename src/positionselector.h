@@ -21,8 +21,6 @@ public:
     std::set<Position> placeGoals();
 
 private:
-    static const Position direction[];
-
     size_t width;
     size_t height;
     size_t numBoxes;

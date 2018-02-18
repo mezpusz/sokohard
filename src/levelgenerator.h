@@ -3,6 +3,7 @@
 #include "map.h"
 #include "position.h"
 #include "positionselector.h"
+#include "solutionhandler.h"
 #include "state.h"
 
 #include <deque>
@@ -18,7 +19,7 @@ public:
     size_t generate(std::vector<char> v);
     std::vector<char>& getMap();
     void printMap() const;
-    void placeBest();
+    Map placeBest();
     void printBest();
     void calculateSolution();
     std::string getSolution() const;
@@ -27,23 +28,16 @@ public:
 private:
     size_t floodfill(Position p, Position& min);
     std::vector<State> expand(State s);
-    
-    static const Position direction[];
 
     size_t width;
     size_t height;
     bool box_changes;
     PositionSelector positionSelector;
+    SolutionHandler solutionHandler;
 
     Map m_map;
-    Map m_bestMap;
-    State m_best;
     size_t m_max;
-    std::vector<State> m_bestSolution;
     std::string m_solution;
-    std::set<Position> m_bestGoals;
-
-    std::set<Position> goals;
 
     // Not yet processed states
     std::deque<State> openSet;

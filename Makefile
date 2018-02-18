@@ -14,7 +14,7 @@ CFLAGS = -Wall -O3 -std=c++17 -stdlib=libc++
 # define any directories containing header files other than /usr/include
 INCLUDES = -I.
 
-CLASSES = filewriter inputparser levelgenerator main map mapgenerator pattern positionselector state
+CLASSES = filewriter inputparser levelgenerator main map mapgenerator pattern positionselector solutionhandler state
 SRCS = $(addprefix src/, $(addsuffix .cpp, $(CLASSES)))
 OBJS = $(addprefix out/, $(addsuffix .o, $(CLASSES)))
 

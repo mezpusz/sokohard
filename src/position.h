@@ -70,3 +70,5 @@ struct Position
                 && p.x < max.x && p.y < max.y);
     }
 };
+
+static const Position direction[] = { Position(1,0), Position(-1,0), Position(0,1), Position(0,-1) };

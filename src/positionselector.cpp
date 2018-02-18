@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-const Position PositionSelector::direction[] = { Position(1,0), Position(-1,0), Position(0,1), Position(0,-1) };
-
 PositionSelector::PositionSelector(size_t width, size_t height, size_t boxNum)
     : width(width)
     , height(height)

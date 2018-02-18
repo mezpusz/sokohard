@@ -68,14 +68,13 @@ int main(int argc, char* argv[])
     std::cout << "Difficulty: " << max << std::endl;
 
     lgen.calculateSolution();
-    lgen.placeBest();
 
     if (outFile.size() == 0)
     {
         outFile = "./output";
     }
 
-    if(!FileWriter::writeMapToFile(lgen.getMap(), width*M, height*N, outFile, lgen.getSolution()))
+    if(!FileWriter::writeMapToFile(lgen.placeBest().getMap(), width*M, height*N, outFile, lgen.getSolution()))
     {
         return -1;
     }
