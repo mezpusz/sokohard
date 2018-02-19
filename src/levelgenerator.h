@@ -42,8 +42,6 @@ private:
 
     // Not yet processed states
     std::deque<State> openSet;
-    // Set to know which states have we encountered
-    std::set<State> checked;
     // Processed states with their value
     std::map<State, size_t> m_closedSet;
     // Map to store each state's parent

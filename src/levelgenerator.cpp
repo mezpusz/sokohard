@@ -23,15 +23,15 @@ size_t LevelGenerator::generate(std::vector<char> v)
     m_closedSet.clear();
     parents.clear();
     openSet.clear();
-    checked.clear();
 
     auto goals = positionSelector.placeGoals();
     const auto playerPositions = positionSelector.initPlayer(goals);
 
     for (const auto& p : playerPositions)
     {
-        openSet.push_back(State(p, goals, 0));
-        checked.insert(State(p, goals, 0));
+        State state(p, goals, 0);
+        openSet.push_back(state);
+        m_closedSet.insert(std::pair<State, size_t>(state, 0));
     }
 
     while(!openSet.empty())
@@ -39,27 +39,16 @@ size_t LevelGenerator::generate(std::vector<char> v)
         const State current = openSet.front();
         openSet.pop_front();
 
-        auto it = parents.find(current);
-        if (it == parents.end())
-        {
-            m_closedSet.insert(std::pair<State, size_t>(current, 0));
-        }
-        else
-        {
-            State child = it->first;
-            State parent = it->second;
-            size_t pValue = m_closedSet.find(parent)->second;
-            pValue += box_changes ? child.getBoxChange() : 1;
-            m_closedSet.insert(std::pair<State, size_t>(current, pValue));
-        }
-
         auto states = expand(current);
         for(const auto& s : states)
         {
-            if (checked.count(s) == 0)
+            if (m_closedSet.count(s) == 0)
             {
                 openSet.push_back(s);
-                checked.insert(s);
+                size_t pValue = 0;
+                pValue = m_closedSet.find(current)->second;
+                pValue += box_changes ? s.getBoxChange() : 1;
+                m_closedSet.insert(std::pair<State, size_t>(s, pValue));
                 parents.insert(std::pair<State, State>(s, current));
             }
         }
