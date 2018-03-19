@@ -23,7 +23,7 @@ void SolutionHandler::update(Map map, std::set<Position> goals, std::vector<Stat
 std::string SolutionHandler::calculateSolution()
 {
     std::string solution;
-    Position player = m_states[0].getPlayer();
+    Position player = *m_states[0].getPlayer().begin();
     std::set<Position> boxes;
     std::set<Position> next;
     std::set<Position>::iterator b;
@@ -111,7 +111,7 @@ std::string SolutionHandler::calculateSolution()
 
 Map SolutionHandler::placeBest()
 {
-    Position player = m_states[0].getPlayer();
+    Position player = *m_states[0].getPlayer().begin();
 
     std::set<Position> boxes = m_states[0].getBoxes();
 
@@ -135,7 +135,7 @@ void SolutionHandler::printBest()
     {
         Map temp = m_map;
 
-        Position player = m_states[i].getPlayer();
+        Position player = *m_states[i].getPlayer().begin();
         std::set<Position> boxes = m_states[i].getBoxes();
 
         for(const auto& goal : m_goals)

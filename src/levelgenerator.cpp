@@ -87,31 +87,6 @@ size_t LevelGenerator::updateBest(std::set<Position> goals)
     return max;
 }
 
-size_t LevelGenerator::floodfill(Position p, Position& min)
-{
-    if (p.x < 0 || p.x >= width
-        || p.y < 0 || p.y >= height
-        || m_map(p) != EMPTY)
-    {
-        return 0;
-    }
-    
-    size_t c = 1;
-    if (p < min)
-    {
-        min = p;
-    }
-
-    m_map(p) = '_';
-
-    c += floodfill(Position(p.x + 1, p.y), min);
-    c += floodfill(Position(p.x - 1, p.y), min);
-    c += floodfill(Position(p.x, p.y + 1), min);
-    c += floodfill(Position(p.x, p.y - 1), min);
-
-    return c;
-}
-
 std::vector<char>& LevelGenerator::getMap()
 {
     return m_map.getMap();
@@ -123,39 +98,31 @@ std::vector<State> LevelGenerator::expand(const State s)
     const Position min(0,0);
     const Position max(width, height);
 
-    Map tempMap = m_map;
-
-    Position minPos = s.getPlayer();
+    std::set<Position> playerPos = s.getPlayer();
     std::set<Position> boxes = s.getBoxes();
-    for(const auto& b : boxes)
-    {
-        m_map(b) = BOX;
-    }
-    floodfill(s.getPlayer(), minPos);
 
-    Map floodedMap = m_map;
-    m_map = tempMap;
-
-    for(const auto& box : boxes)
+    for(const auto& p : playerPos)
     {
         Position actual;
 
-        for(const auto& direction : directions)
+        for(const auto& d : directions)
         {
-            if (box.isInInterval(min,max,direction)
-                && floodedMap(box + direction) == '_')
-            {
-                actual = box;
-                actual += direction;
+            actual = p;
 
+            if (actual.isInInterval(min,max,d)
+                && boxes.count(actual + d) != 0)
+            {
+                auto direction = d.inv();
+                auto box = actual + d;
+                
                 while (actual.isInInterval(min,max,direction)
-                    && floodedMap(actual + direction) == '_')
+                    && m_map(actual + direction) == EMPTY)
                 {
                     std::set<Position> ps(boxes.begin(), boxes.end());
                     auto pushedBox = *(ps.find(box));
                     ps.erase(pushedBox);
                     ps.insert(actual);
-                    Position newPlayer = positionSelector.placePlayer(ps, actual + direction);
+                    std::set<Position> newPlayer = positionSelector.placePlayer(ps, actual + direction);
                     result.push_back(State(newPlayer, ps, pushedBox.diff(actual).abs()));
                     actual += direction;
                 }

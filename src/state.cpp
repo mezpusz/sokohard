@@ -1,6 +1,6 @@
 #include "state.h"
 
-State::State(Position player, std::set<Position> boxes, size_t boxChange)
+State::State(std::set<Position> player, std::set<Position> boxes, size_t boxChange)
     : boxes(boxes.begin(), boxes.end())
     , player(player)
     , boxChange(boxChange)
@@ -35,7 +35,7 @@ bool State::operator<(const State& rhs) const
             && boxes < rhs.boxes);
 }
 
-Position State::getPlayer() const
+std::set<Position> State::getPlayer() const
 {
     return player;
 }
@@ -52,8 +52,8 @@ size_t State::getBoxChange() const
 
 std::ostream& operator<<(std::ostream& os, const State& state)
 {
-    os << "Player: (" << state.player.x
-       << "," << state.player.y << ")\n";
+    /*os << "Player: (" << state.player.x
+       << "," << state.player.y << ")\n";*/
 
     for(const auto& b : state.boxes)
     {

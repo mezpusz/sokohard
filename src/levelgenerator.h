@@ -27,7 +27,6 @@ public:
 
 private:
     size_t updateBest(std::set<Position> goals);
-    size_t floodfill(Position p, Position& min);
     std::vector<State> expand(State s);
 
     size_t width;

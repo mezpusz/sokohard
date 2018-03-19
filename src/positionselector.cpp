@@ -29,10 +29,11 @@ void PositionSelector::init(std::vector<char> v)
     }
 }
 
-std::vector<Position> PositionSelector::initPlayer(std::set<Position> boxes)
+std::vector<std::set<Position>> PositionSelector::initPlayer(std::set<Position> boxes)
 {
     size_t count = 0;
-    std::vector<Position> positions;
+    std::vector<std::set<Position>> positionsVector;
+    std::set<Position> availables;
     Position p, min;
 
     Map tempMap = m_map;
@@ -41,28 +42,45 @@ std::vector<Position> PositionSelector::initPlayer(std::set<Position> boxes)
     {
         m_map(box) = BOX;
     }
+    for(const auto& box : boxes)
+    {
+        for(const auto d : directions)
+        {
+            Position pos = box + d;
+            if (box.isInInterval(Position(0,0),Position(width,height),d)
+                && (m_map(pos) == EMPTY))
+            {
+                availables.insert(pos);
+            }
+        }
+    }
 
     while(count != available - numBoxes)
     {
+        std::set<Position> positions;
         p.x = Random(0, width);
         p.y = Random(0, height);
-
         min = p;
-
-        if(m_map(p) != EMPTY)
-        {
-            continue;
-        }
         count += floodfill(p, min);
-        positions.push_back(min);
+        for(auto it = availables.begin(); it != availables.end();)
+        {
+            if (m_map(*it) == '_') {
+                positions.insert(*it);
+                it = availables.erase(it);
+            } else {
+                it++;
+            }
+        }
+        positionsVector.push_back(positions);
     }
     m_map = tempMap;
 
-    return positions;
+    return positionsVector;
 }
 
-Position PositionSelector::placePlayer(std::set<Position> boxes, Position prev)
+std::set<Position> PositionSelector::placePlayer(std::set<Position> boxes, Position prev)
 {
+    std::set<Position> result;
     Position min;
 
     Map tempMap = m_map;
@@ -74,9 +92,20 @@ Position PositionSelector::placePlayer(std::set<Position> boxes, Position prev)
 
     min = prev;
     floodfill(prev, min);
+    for(const auto& b : boxes)
+    {
+        for(const auto& d : directions)
+        {
+            if (b.isInInterval(Position(0,0),Position(width, height), d)
+                && m_map(b+d) == '_')
+            {
+                result.insert(b + d);
+            }
+        }
+    }
     m_map = tempMap;
 
-    return min;
+    return result;
 }
 
 std::set<Position> PositionSelector::placeGoals()
@@ -118,11 +147,11 @@ size_t PositionSelector::floodfill(Position p, Position& min)
 {
     if (p.x < 0 || p.x >= width
         || p.y < 0 || p.y >= height
-    || m_map(p) != EMPTY)
+        || m_map(p) != EMPTY)
     {
         return 0;
     }
-    
+
     size_t c = 1;
     if (p < min)
     {

@@ -15,8 +15,8 @@ class PositionSelector
 public:
     PositionSelector(size_t width, size_t height, size_t boxNum);
     void init(std::vector<char> v);
-    std::vector<Position> initPlayer(std::set<Position> boxes);
-    Position placePlayer(std::set<Position> boxes, Position prev);
+    std::vector<std::set<Position>> initPlayer(std::set<Position> boxes);
+    std::set<Position> placePlayer(std::set<Position> boxes, Position prev);
     size_t floodfill(Position p, Position& min);
     std::set<Position> placeGoals();
 

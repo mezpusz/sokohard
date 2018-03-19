@@ -8,7 +8,7 @@
 class State
 {
 public:
-    State(Position player, std::set<Position> boxes, size_t boxChange);
+    State(std::set<Position> player, std::set<Position> boxes, size_t boxChange);
     State(const State& rhs);
     State() = default;
 
@@ -16,7 +16,7 @@ public:
     bool operator==(const State& rhs) const;
     bool operator<(const State& rhs) const;
 
-    Position getPlayer() const;
+    std::set<Position> getPlayer() const;
     std::set<Position> getBoxes() const;
     size_t getBoxChange() const;
 
@@ -24,7 +24,7 @@ public:
 
 private:
     std::set<Position> boxes;
-    Position player;
+    std::set<Position> player;
     size_t boxChange;
 };
 
