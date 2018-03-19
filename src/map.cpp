@@ -64,26 +64,27 @@ int Map::height() const
 
 std::ostream& operator<<(std::ostream& os, const Map& map)
 {
-    os << '\n';
-    for(int i = 0; i < map.m_width + 2; ++i)
+    os << '\n' << (char)WALL;
+    for(int i = 0; i < map.m_width; ++i)
     {
-        os << WALL;
+        os << (i % 10);
     }
-    os << '\n';
+    os << 'x' << '\n';
     for(int j = 0; j < map.m_height; ++j)
     {
-        os << WALL;
+        os << (j % 10);
         for(int i = 0; i < map.m_width; ++i)
         {
             os << map(i,j);
         }
-        os << WALL;
+        os << (char)WALL;
         os << '\n';
     }
 
-    for(int i = 0; i < map.m_width + 2; ++i)
+    os << 'y';
+    for(int i = 0; i < map.m_width + 1; ++i)
     {
-        os << WALL;
+        os << (char)WALL;
     }
     os << '\n';
     os << '\n';
