@@ -4,3 +4,6 @@ cmake_install.cmake
 Makefile
 CMakeFiles
 CMakeCache.txt
+CMakeScripts
+sokohard.build
+sokohard.xcodeproj
