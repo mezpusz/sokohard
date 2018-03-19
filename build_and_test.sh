@@ -2,6 +2,7 @@
 
 set -euo "pipefail"
 
+cmake .
 make
 
 readonly SEED2x2w3="1517341101"

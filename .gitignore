@@ -1,3 +1,6 @@
-bazel-*
 *.sok
 out
+cmake_install.cmake
+Makefile
+CMakeFiles
+CMakeCache.txt
