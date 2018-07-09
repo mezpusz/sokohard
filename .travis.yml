@@ -1,1 +1,13 @@
 script: ./build_and_test.sh
+language: generic
+
+dist: trusty
+
+matrix:
+    include:
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['libc++-dev']
