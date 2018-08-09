@@ -4,6 +4,7 @@
 #include "levelgenerator.h"
 #include "filewriter.h"
 #include "inputparser.h"
+#include "util.h"
 
 #include <iostream>
 #include <set>
@@ -38,7 +39,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Size: " << width*M << "x" << height*N << ", boxes: "
         << numBoxes << ", seed: " << seed << std::endl;
-    srand(seed);
+    seedRandom(seed);
     MapGenerator mgen(width, height, M, N, numBoxes);
     LevelGenerator lgen(width*M, height*N, numBoxes, box_changes);
 

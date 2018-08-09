@@ -22,6 +22,7 @@ add_executable(sokohard filewriter.cpp
                         solutionhandler.h
                         state.cpp
                         state.h
+                        util.cpp
                         util.h
                     )
 include_directories("${PROJECT_SOURCE_DIR}")
