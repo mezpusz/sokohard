@@ -10,19 +10,27 @@ A possible solution is also outputted to a file postfixed `_solution.sok`.
 
 ## Requirements
 
-* Mac OSX or Linux
-* make
+* CMake
+* clang
 
 ## Building locally
 
 After cloning the repository open up a terminal and hit
 ````bash
+$ cmake .
 $ make
 ````
 in the root folder.
 
 This will create the output files with the standalone executable
 `sokohard` in the `out` folder.
+
+You can also open it in Xcode or any editor that CMake supports.
+````bash
+$ cmake . -G Xcode
+$ open sokohard.xcodeproj
+````
+in the root folder.
 
 ## Usage
 
@@ -36,3 +44,4 @@ Parameters are the following:
 * `-b` - Boxes to be placed on the map - defaults to 2
 * `-o` - Output file name - defaults to `out`
 * `-s` - Seed (32-bit integer) for the random generator. - default is current UNIX-epoch timestamp
+* `--box-changes` - The box changes (pushes) metric is used instead of the default player moves metric.
