@@ -6,50 +6,55 @@
 #include <iostream>
 
 LevelGenerator::LevelGenerator(size_t w, size_t h, size_t n, bool box_changes)
-    : width(w)
-    , height(h)
-    , box_changes(box_changes)
-    , positionSelector(w, h, n)
-    , solutionHandler()
+    : m_width(w)
+    , m_height(h)
+    , m_boxChanges(box_changes)
+    , m_positionSelector(w, h, n)
+    , m_solutionHandler()
+    , m_map()
     , m_max(0)
+    , m_solution()
+    , m_openSet()
+    , m_closedSet()
+    , m_parents()
 {
 }
 
 size_t LevelGenerator::generate(std::vector<char> v)
 {
-    positionSelector.init(v);
-    m_map.init(width, height, v);
+    m_positionSelector.init(v);
+    m_map.init(m_width, m_height, v);
 
     m_closedSet.clear();
-    parents.clear();
-    openSet.clear();
+    m_parents.clear();
+    m_openSet.clear();
 
-    auto goals = positionSelector.placeGoals();
-    const auto playerPositions = positionSelector.initPlayer(goals);
+    auto goals = m_positionSelector.placeGoals();
+    const auto playerPositions = m_positionSelector.initPlayer(goals);
 
     for (const auto& p : playerPositions)
     {
         State state(p, goals, 0);
-        openSet.push_back(state);
+        m_openSet.push_back(state);
         m_closedSet.insert(std::pair<State, size_t>(state, 0));
     }
 
-    while(!openSet.empty())
+    while(!m_openSet.empty())
     {
-        const State current = openSet.front();
-        openSet.pop_front();
+        const State current = m_openSet.front();
+        m_openSet.pop_front();
 
         auto states = expand(current);
         for(const auto& s : states)
         {
             if (m_closedSet.count(s) == 0)
             {
-                openSet.push_back(s);
+                m_openSet.push_back(s);
                 size_t pValue = 0;
                 pValue = m_closedSet.find(current)->second;
-                pValue += box_changes ? s.getBoxChange() : 1;
+                pValue += m_boxChanges ? s.getBoxChange() : 1;
                 m_closedSet.insert(std::pair<State, size_t>(s, pValue));
-                parents.insert(std::pair<State, State>(s, current));
+                m_parents.insert(std::pair<State, State>(s, current));
             }
         }
     }
@@ -77,20 +82,20 @@ size_t LevelGenerator::updateBest(std::set<Position> goals)
         State t = best;
         std::vector<State> states;
         states.push_back(best);
-        while(parents.find(t) != parents.end())
+        while(m_parents.find(t) != m_parents.end())
         {
-            states.push_back(parents.find(t)->second);
-            t = parents.find(t)->second;
+            states.push_back(m_parents.find(t)->second);
+            t = m_parents.find(t)->second;
         }
-        solutionHandler.update(m_map, goals, states);
+        m_solutionHandler.update(m_map, goals, states);
     }
     return max;
 }
 
 size_t LevelGenerator::floodfill(Position p, Position& min)
 {
-    if (p.x < 0 || p.x >= width
-        || p.y < 0 || p.y >= height
+    if (p.x < 0 || p.x >= m_width
+        || p.y < 0 || p.y >= m_height
         || m_map(p) != EMPTY)
     {
         return 0;
@@ -121,7 +126,7 @@ std::vector<State> LevelGenerator::expand(const State s)
 {
     std::vector<State> result;
     const Position min(0,0);
-    const Position max(width, height);
+    const Position max(m_width, m_height);
 
     Map tempMap = m_map;
 
@@ -155,7 +160,7 @@ std::vector<State> LevelGenerator::expand(const State s)
                     auto pushedBox = *(ps.find(box));
                     ps.erase(pushedBox);
                     ps.insert(actual);
-                    Position newPlayer = positionSelector.placePlayer(ps, actual + direction);
+                    Position newPlayer = m_positionSelector.placePlayer(ps, actual + direction);
                     result.push_back(State(newPlayer, ps, pushedBox.diff(actual).abs()));
                     actual += direction;
                 }
@@ -167,17 +172,17 @@ std::vector<State> LevelGenerator::expand(const State s)
 
 void LevelGenerator::calculateSolution()
 {
-    m_solution = solutionHandler.calculateSolution();
+    m_solution = m_solutionHandler.calculateSolution();
 }
 
 Map LevelGenerator::placeBest()
 {
-    return solutionHandler.placeBest();
+    return m_solutionHandler.placeBest();
 }
 
 void LevelGenerator::printBest()
 {
-    solutionHandler.printBest();
+    m_solutionHandler.printBest();
 }
 
 void LevelGenerator::printMap() const

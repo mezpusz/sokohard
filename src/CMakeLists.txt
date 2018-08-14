@@ -6,6 +6,8 @@ add_executable(sokohard filewriter.cpp
                         inputparser.h
                         levelgenerator.cpp
                         levelgenerator.h
+                        levelsolver.cpp
+                        levelsolver.h
                         main.cpp
                         map_elements.h
                         map.cpp
@@ -24,5 +26,29 @@ add_executable(sokohard filewriter.cpp
                         state.h
                         util.cpp
                         util.h
+                    )
+add_executable(sokosolve filereader.cpp
+                         filereader.h
+                         filewriter.cpp
+                         filewriter.h
+                         inputparser.cpp
+                         inputparser.h
+                         levelgenerator.cpp
+                         levelgenerator.h
+                         levelsolver.cpp
+                         levelsolver.h
+                         main2.cpp
+                         map_elements.h
+                         map.cpp
+                         map.h
+                         position.h
+                         positionselector.cpp
+                         positionselector.h
+                         solutionhandler.cpp
+                         solutionhandler.h
+                         state.cpp
+                         state.h
+                         util.cpp
+                         util.h
                     )
 include_directories("${PROJECT_SOURCE_DIR}")

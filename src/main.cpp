@@ -71,7 +71,8 @@ int main(int argc, char* argv[])
         outFile = "./output";
     }
 
-    if(!FileWriter::writeMapToFile(lgen.placeBest(), outFile, lgen.getSolution()))
+    if(!FileWriter::writeMapToFile(lgen.placeBest(), outFile)
+       || !FileWriter::writeSolutionToFile(lgen.getSolution(), outFile))
     {
         return -1;
     }

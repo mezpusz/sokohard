@@ -5,12 +5,11 @@
 #include <fstream>
 #include <iostream>
 
-bool FileWriter::writeMapToFile(Map map, const std::string& filename, const std::string& solution)
+bool FileWriter::writeMapToFile(Map map, const std::string& filename)
 {
     std::ofstream mapFile(filename + ".sok");
-    std::ofstream solFile(filename + "_solution.sok");
 
-    if(!mapFile.is_open() || !solFile.is_open())
+    if(!mapFile.is_open())
     {
         return false;
     }
@@ -30,9 +29,19 @@ bool FileWriter::writeMapToFile(Map map, const std::string& filename, const std:
         mapFile << std::endl;
     }
 
-    solFile << solution << std::endl;
-
     mapFile.close();
+    return true;
+}
+
+bool FileWriter::writeSolutionToFile(const std::string& solution, const std::string& filename)
+{
+    std::ofstream solFile(filename + "_solution.sok");
+    if(!solFile.is_open())
+    {
+        return false;
+    }
+    
+    solFile << solution << std::endl;
     solFile.close();
     return true;
 }

@@ -71,4 +71,5 @@ struct Position
     }
 };
 
+static const Position INVALID = Position(-1,-1);
 static const Position directions[] = { Position(1,0), Position(-1,0), Position(0,1), Position(0,-1) };
