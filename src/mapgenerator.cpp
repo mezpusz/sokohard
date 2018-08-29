@@ -152,7 +152,7 @@ int MapGenerator::countConnected(int i, int j)
         {
             result += countConnected(i-1, j);
         }
-        if (i < width*m)
+        if (i < width*m -1)
         {
             result += countConnected(i+1, j);
         }
@@ -160,7 +160,7 @@ int MapGenerator::countConnected(int i, int j)
         {
             result += countConnected(i, j-1);
         }
-        if (j < height*n)
+        if (j < height*n -1)
         {
             result += countConnected(i, j+1);
         }
@@ -252,12 +252,12 @@ void MapGenerator::removeDeadEnd(int i, int j)
 
     if (north && south)
     {
-        if (west)
+        if (west && !east)
         {
             charMap(i, j) = WALL;
             removeDeadEnd(i+1, j);
         }
-        else if (east)
+        else if (east && !west)
         {
             charMap(i, j) = WALL;
             removeDeadEnd(i-1, j);
@@ -265,12 +265,12 @@ void MapGenerator::removeDeadEnd(int i, int j)
     }
     else if (west && east)
     {
-        if (north)
+        if (north && !south)
         {
             charMap(i, j) = WALL;
             removeDeadEnd(i, j+1);
         }
-        else if (south)
+        else if (south && !north)
         {
             charMap(i, j) = WALL;
             removeDeadEnd(i, j-1);
